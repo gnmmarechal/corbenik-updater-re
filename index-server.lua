@@ -17,16 +17,22 @@ if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
 	usebgm = 1
 end
 
+if System.doesFileExist("/corbenik-updater-re/settings/keepconfig") then
+	configkeep = 1
+else
+	configkeep = 0
+end
+
 -- Security checks
 if not System.doesFileExist("/corbenik/lib/firmware/native") then
 	showcorbenik = 0 -- Disables showing the Update Corbenik option.
 else
-	showcorbenik = 0
+	showcorbenik = 1
 end
 if not System.doesFileExist("/skeith/lib/firmware/native") then
 	showskeith = 0 -- Disables showing the Update Skeith option.
 else
-	showskeith = 0
+	showskeith = 1
 end
 if ((showcorbenik == false)and(showskeith == false)) then
 	error("Corbenik/Skeith CFW not found.") -- Errors if neither Skeith nor Corbenik are found.
@@ -287,4 +293,85 @@ function installcfw(cfwpath, keepconfig) -- used as "installcfw("/corbenik", 1)"
 	end
 	debugWrite(0,120,"Updated. Press A to reboot or B to quit!", green, TOP_SCREEN)
 	updated = 1	
+end
+
+function isdirtyupdate() -- Checks whether to keep config or not and sets the var for it.
+	if configkeep == 1 then
+		configkept = "Yes"
+	else
+		configkept = "No"
+	end
+	if Controls.check(pad, KEY_R) and not Controls.check(oldpad, KEY_R) then
+		if configkeep == 1 then
+			configkeep = 0
+		else
+			configkeep = 1
+		end
+	end
+end
+-- Actual UI screens
+
+function head() -- Head of all screens
+	if headflip == 1 then
+		debugWrite(0,0,"Corbenik CFW Updater: RE v."..version, white, TOP_SCREEN)
+		debugWrite(0,20,"==============================", red, TOP_SCREEN)	
+	end
+	Screen.debugPrint(0,0,"Corbenik CFW Updater: RE v."..version, white, TOP_SCREEN)
+	Screen.debugPrint(0,20,"==============================", red, TOP_SCREEN)	
+end
+
+function bottomscreen() -- Bottom Screen
+	Screen.debugPrint(0,0, "Latest Corbenik CFW: v"..corbenikver, green, BOTTOM_SCREEN)
+	Screen.debugPrint(0,20, "Latest Skeith CFW: "..skeithver, green, BOTTOM_SCREEN)
+	Screen.debugPrint(0,40, "==============================", red, BOTTOM_SCREEN)
+	Screen.debugPrint(0,60, "Author: gnmmarechal", white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,80, "Special Thanks:", white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,100, "Crystal the Glaceon (Tester)", white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,120, "chaoskagami (CFW Developer)", white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,140, "Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)
+end
+
+function firstscreen() -- scr == 1 | First UI screen, main menu
+	head()
+	Screen.debugPrint(0,40,"Welcome to Corbenik CFW Updater: RE!", white, TOP_SCREEN)
+	Screen.debugPrint(0,100,"Please select an option:", white, TOP_SCREEN)
+	Screen.debugPrint(0,120,"Keep Config (Press R): "..configkept, white, TOP_SCREEN)
+	if showcorbenik == 1 then
+		Screen.debugPrint(0,140,"A) Update stable - Corbenik CFW", white, TOP_SCREEN)
+		inputscr(2, KEY_A)
+	end
+	if showskeith == 1 then
+		Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", white, TOP_SCREEN)
+		inputscr(3, KEY_X)
+	end
+	Screen.debugPrint(0,180,"B) Quit", white, TOP_SCREEN)
+	inputscr(-1, KEY_B)
+end
+
+function installer(cfwpath, mode) -- scr == 2/3 | Installation UI screen
+	head()
+	debugWrite(0, 40, "Started installation of CFW...", white, TOP_SCREEN)
+	installcfw(cfwpath, mode)
+	inputscr(-1, KEY_B) -- Checks for exit
+	inputscr(-2, KEY_A) -- Checks for reboot
+end
+
+-- Main Loop
+precheck()
+precleanup()
+
+while true do
+	clear()
+	pad = Controls.read()
+	bottomscreen() -- Display bottom screen info
+	
+	if scr == 1 then
+		firstscreen()
+	elseif scr == 2 then
+		installer("/corbenik", configkeep)
+	elseif scr == 3 then
+		installer("/skeith", configkeep)
+	end
+	
+	flip()
 end
