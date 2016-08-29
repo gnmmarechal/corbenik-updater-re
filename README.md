@@ -1,3 +1,8 @@
+<p align="center">
+	<img src="https://github.com/gnmmarechal/corbenik-updater-re/blob/master/buildres/banner.png?raw=true"/>
+</p>
+
+
 # Corbenik CFW Updater: RE
 
 Complete REwrite of the original Corbenik and Skeith CFW Updaters.
