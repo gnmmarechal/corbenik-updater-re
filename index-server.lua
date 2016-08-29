@@ -290,6 +290,22 @@ function installcfw(cfwpath, keepconfig) -- used as "installcfw("/corbenik", 1)"
 		end
 		-- Post-installation cleanup
 		System.deleteFile(localzip)
+		-- Clean files that were in the package and are not needed.
+		if System.doesFileExist("/README.md") then
+			System.deleteFile("/README.md")
+		end
+		if System.doesFileExist("/LICENSE.txt") then
+			System.deleteFile("/LICENSE.txt")
+		end
+		if System.doesFileExist("/generate_localeemu.sh") then
+			System.deleteFile("/generate_localeemu.sh")
+		end
+		if System.doesFileExist("/n3ds_firm.sh") then
+			System.deleteFile("/n3ds_firm.sh")
+		end
+		if System.doesFileExist("/o3ds_firm.sh") then
+			System.deleteFile("/o3ds_firm.sh")
+		end
 	end
 	debugWrite(0,120,"Updated. Press A to reboot or B to quit!", green, TOP_SCREEN)
 	updated = 1	
