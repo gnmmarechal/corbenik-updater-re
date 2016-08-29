@@ -30,12 +30,12 @@ It is detects for the existence of a proper installation of Corbenik CFW or Skei
 prevent you from continuing. If only one of them is found, it'll hide the option to update the other CFW.
 You can set a custom payload path for both Corbenik and Skeith ARM9LoaderHax payloads by writing said path to the config files.
 
-Ex. for the path SDMC:/somedir/anotherdir/arm9payload.bin , you can do:
+Ex. for the path `SDMC:/somedir/anotherdir/arm9payload.bin` , you can do:
 
-For Corbenik: Create/Edit the file "/corbenik-updater-re/settings/corbenik.cfg"
-For Skeith: Create/Edit the file "/corbenik-updater-re/settings/skeith.cfg"
+For Corbenik: Create/Edit the file `/corbenik-updater-re/settings/corbenik.cfg`
+For Skeith: Create/Edit the file `/corbenik-updater-re/settings/skeith.cfg`
 
-Enter the path to the payload in the file like this: /somedir/anotherdir/arm9payload.bin
+Enter the path to the payload in the file like this: `/somedir/anotherdir/arm9payload.bin`
 Corbenik CFW Updater: RE directly supports the /arm9loaderhax_si.bin path as standard if you use that as well, so you won't need to set it yourself with a config file.
 Corbenik CFW Updater: RE will always fetch the latest updater script from my server, so you can expect few user-side updates.
 As for updates that require a new CIA file to be installed (like an update to the Lua Player Plus binary), they'll be automatically
@@ -67,6 +67,6 @@ menu and exiting/entering the app to apply the settings.
 
 ##Special Thanks:
 
-*@Rinnegatamante - for Lua Player Plus 3DS and help with Lua programming
-*@chaoskagami - for Corbenik/Skeith CFW and for telling me before releasing updates that would break my updater
-*Crystal the Glaceon @GBATemp - for the help with testing the updaters
+*@Rinnegatamante - for Lua Player Plus 3DS and help with Lua programming.
+*@chaoskagami - for Corbenik/Skeith CFW and for telling me before releasing updates that would break my updater.
+*Crystal the Glaceon @GBATemp - for the help with testing the updaters, especially the original ones.
