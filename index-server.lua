@@ -378,7 +378,8 @@ while true do
 	clear()
 	pad = Controls.read()
 	bottomscreen() -- Display bottom screen info
-	-- Checks for BGM toggle
+	-- Checks for BGM toggle and dirty/clean update toggle
+	isdirtyupdate()
 	bgmtogglecheck()
 	-- Actual UI screens and installer phases
 	if scr == 1 then
