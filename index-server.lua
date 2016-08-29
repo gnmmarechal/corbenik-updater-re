@@ -34,7 +34,7 @@ if not System.doesFileExist("/skeith/lib/firmware/native") then
 else
 	showskeith = 1
 end
-if ((showcorbenik == false)and(showskeith == false)) then
+if ((showcorbenik == 0)and(showskeith == 0)) then
 	error("Corbenik/Skeith CFW not found.") -- Errors if neither Skeith nor Corbenik are found.
 end	
 if usebgm == 1 then
