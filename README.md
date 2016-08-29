@@ -53,7 +53,13 @@ menu and exiting/entering the app to apply the settings.
 ##Usage:
 
 1 - Launch the updater.
-2 - Select whether you want 
+2 - Select whether you want Dirty or Clean update mode by hitting R.
+3 - Press A to update Corbenik or X to update Skeith.
+4 - Press A to reboot or B to exit.
+5 - ?????
+6 - Profit
+
+
 ##Special Thanks:
 
 *@Rinnegatamante - for Lua Player Plus 3DS and help with Lua programming
