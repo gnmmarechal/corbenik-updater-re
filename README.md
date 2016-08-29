@@ -46,6 +46,14 @@ supported directly migrating data from an older installation. As that tool is no
 version, I didn't include the migration function in this updater. I will release an auto-migration tool separate of this, though, to save you the work
 while keeping this tool free from unnecessary code.
 
+This app supports BGMs. One of the releases includes a BGM (and you can set a custom BGM by placing it at /corbenik-updater-re/resources/bgm.wav on both releases), to listen to it you need a DSP dump (you can use the DSP dumper by Rinnegatamante found at http://rinnegataman.it).
+You also need to change the setting for the BGM to play. You can do this by either creating a new file at /corbenik-updater-re/settings/usebgm or by hitting both L and Y on the main
+menu and exiting/entering the app to apply the settings.
+
+##Usage:
+
+1 - Launch the updater.
+2 - Select whether you want 
 ##Special Thanks:
 
 *@Rinnegatamante - for Lua Player Plus 3DS and help with Lua programming
