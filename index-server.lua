@@ -49,6 +49,10 @@ if usebgm == 1 then
 	if System.doesFileExist("/corbenik-updater-re/resources/bgm.wav") then
 		bgmpath = "/corbenik-updater-re/resources/bgm.wav"
 	end
+	--Disable BGM if bgmpath is null.
+	if bgmpath == nil then
+		usebgm = 0
+	end
 else
 	usebgm = 0
 end
