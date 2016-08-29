@@ -23,6 +23,4 @@ tools\bannertool makesmdh -s "Corbenik CFW Updater: RE" -l "Corbenik/Skeith CFW 
 echo Creating target 1 CIA (Standard Edition)...
 ::Create CIA for regular edition
 tools\makerom -f cia -o ..\CorbenikCFWUpdaterRE.cia -elf bin\lpp-3ds-forcedsp.elf -rsf corbenikupdaterre.rsf -icon res\icon.bin -banner res\banner.bin -exefslogo -target t -romfs romfs.bin
-echo Created all targets. Press any key to quit.
-pause >nul
-exit /b
+echo Created all targets.

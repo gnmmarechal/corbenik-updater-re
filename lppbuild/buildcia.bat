@@ -31,6 +31,4 @@ echo Creating romfs file from directory...
 tools\3dstool -cvtf romfs romfs.bin --romfs-dir romfs
 echo Creating target 2 CIA (BGM Edition)...
 tools\makerom -f cia -o ..\CorbenikCFWUpdaterRE-BGM.cia -elf bin\lpp-3ds-forcedsp.elf -rsf corbenikupdaterre.rsf -icon res\icon.bin -banner res\banner.bin -exefslogo -target t -romfs romfs.bin
-echo Created all targets. Press any key to quit.
-pause >nul
-exit /b
+echo Created all targets.

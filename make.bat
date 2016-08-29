@@ -18,25 +18,8 @@ cd lppbuild
 buildcia
 exit /b
 
-:release
-cd lppbuild
-buildcia
-makeziprel
-exit /b
-
-:release-nobgm
-cd lppbuild
-buildcia-nobgm
-makeziprel-nobgm
-exit /b
-
-:release-bgm
-cd lppbuild
-buildcia-bgm
-makeziprel-bgm
-exit /b
-
 :clean
+del *.zip
 del *.cia
 cd lppbuild
 del *.bin
