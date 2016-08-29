@@ -37,6 +37,7 @@ makeziprel-bgm
 exit /b
 
 :clean
+del *.cia
 cd lppbuild
 del *.bin
 cd res
