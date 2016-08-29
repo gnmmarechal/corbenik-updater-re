@@ -1,15 +1,10 @@
 @echo off
-::SET VARS
-set appauthor = gnmmarechal
-set shortdesc = Corbenik CFW Updater: RE
-set longdesc = Corbenik/Skeith CFW Updater: RE
-
 ::BUILDSCRIPT
 ::Delete old index file from the romfs directory
 echo LPP-Build Nintendo 3DS CIA Script by gnmmarechal
 echo ===================================
 echo Version: 1.0
-echo Project: %shortdesc%
+echo Project: Corbenik CFW Updater: RE
 echo ===================================
 echo Cleaning romfs directory....
 del romfs\index.lua
@@ -24,7 +19,7 @@ tools\3dstool -cvtf romfs romfs.bin --romfs-dir romfs
 echo Creating banner from files...
 tools\bannertool makebanner -i ..\buildres\banner.png -a ..\buildres\audio.wav -o res\banner.bin
 echo Creating icon from file...
-tools\bannertool makesmdh -s "%shortdesc%" -l "%longdesc%" -p "%appauthor%" -i ..\buildres\icon.png -o res\icon.bin
+tools\bannertool makesmdh -s "Corbenik CFW Updater: RE" -l "Corbenik/Skeith CFW Updater: RE" -p "gnmmarechal" -i ..\buildres\icon.png -o res\icon.bin
 echo Creating target 1 CIA (Standard Edition)...
 ::Create CIA for regular edition
 tools\makerom -f cia -o ..\CorbenikCFWUpdaterRE.cia -elf bin\lpp-3ds-forcedsp.elf -rsf corbenikupdaterre.rsf -icon res\icon.bin -banner res\banner.bin -exefslogo -target t -romfs romfs.bin
