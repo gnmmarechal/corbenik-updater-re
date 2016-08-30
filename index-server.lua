@@ -355,6 +355,16 @@ function head() -- Head of all screens
 end
 
 function bottomscreen() -- Bottom Screen
+	if headflip == 1 then
+		debugWrite(0,0, "Latest Corbenik CFW: v"..corbenikver, green, BOTTOM_SCREEN)
+		debugWrite(0,20, "Latest Skeith CFW: "..skeithver, green, BOTTOM_SCREEN)
+		debugWrite(0,40, "==============================", red, BOTTOM_SCREEN)
+		debugWrite(0,60, "Author: gnmmarechal", white, BOTTOM_SCREEN)
+		debugWrite(0,80, "Special Thanks:", white, BOTTOM_SCREEN)
+		debugWrite(0,100, "Crystal the Glaceon (Tester)", white, BOTTOM_SCREEN)
+		debugWrite(0,120, "chaoskagami (CFW Developer)", white, BOTTOM_SCREEN)
+		debugWrite(0,140, "Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)
+	end
 	Screen.debugPrint(0,0, "Latest Corbenik CFW: v"..corbenikver, green, BOTTOM_SCREEN)
 	Screen.debugPrint(0,20, "Latest Skeith CFW: "..skeithver, green, BOTTOM_SCREEN)
 	Screen.debugPrint(0,40, "==============================", red, BOTTOM_SCREEN)
@@ -362,7 +372,7 @@ function bottomscreen() -- Bottom Screen
 	Screen.debugPrint(0,80, "Special Thanks:", white, BOTTOM_SCREEN)
 	Screen.debugPrint(0,100, "Crystal the Glaceon (Tester)", white, BOTTOM_SCREEN)
 	Screen.debugPrint(0,120, "chaoskagami (CFW Developer)", white, BOTTOM_SCREEN)
-	Screen.debugPrint(0,140, "Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,140, "Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)	
 end
 
 function firstscreen() -- scr == 1 | First UI screen, main menu
