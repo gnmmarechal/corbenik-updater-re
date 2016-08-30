@@ -6,7 +6,7 @@ BasicInfo:
   Logo                    : Nintendo # Nintendo / Licensed / Distributed / iQue / iQueForSystem
 
 TitleInfo:
-  UniqueId                : 0xA544
+  UniqueId                : 0xA545
   Category                : Application
   
 CardInfo:
