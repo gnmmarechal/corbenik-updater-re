@@ -353,16 +353,14 @@ function isdirtyupdate() -- Checks whether to keep config or not and sets the va
 	end
 end
 
-function bgmtogglecheck() -- Checks for KEY_L + KEY_Y and toggles BGM usage (requires restart of the updater to take effect)
-	if Controls.check(pad, KEY_L) and Controls.check(pad, KEY_Y) then
-		if (not Controls.check(oldpad, KEY_L))and(not Controls.check(oldpad, KEY_Y)) then
-			if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
-				System.deleteFile("/corbenik-updater-re/settings/usebgm")
-			else
-				bgmsettingstream = io.open("/corbenik-updater-re/settings/usebgm",FCREATE)
-				io.write(bgmsettingstream,0,"Use BGM", 7)
-				io.close(bgmsettingstream)
-			end
+function bgmtogglecheck() -- Checks for KEY_L and toggles BGM usage (requires restart of the updater to take effect)
+	if Controls.check(pad, KEY_L) and not Controls.check(pad, KEY_L) then
+		if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
+			System.deleteFile("/corbenik-updater-re/settings/usebgm")
+		else
+			bgmsettingstream = io.open("/corbenik-updater-re/settings/usebgm",FCREATE)
+			io.write(bgmsettingstream,0,"Use BGM", 7)
+			io.close(bgmsettingstream)
 		end
 	end
 end
