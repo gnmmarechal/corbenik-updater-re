@@ -341,8 +341,14 @@ function isdirtyupdate() -- Checks whether to keep config or not and sets the va
 	if Controls.check(pad, KEY_R) and not Controls.check(oldpad, KEY_R) then
 		if configkeep == 1 then
 			configkeep = 0
+			-- Delete config setting for this option
+			System.deleteFile("/corbenik-updater-re/settings/keepconfig")
 		else
 			configkeep = 1
+			-- Create config option for this option to be saved upon exit and restart
+			confsettingstream = io.open("/corbenik-updater-re/settings/keepconfig",FCREATE)
+			io.write(confsettingstream,0,"Keep Config", 11)
+			io.close(confsettingstream)
 		end
 	end
 end
