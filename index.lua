@@ -4,14 +4,15 @@
 
 -- This script fetches the latest updater script and runs it. If the server-side script has a higher rel number, the CIA will also be updated.
 clientrel = 1
-bootstrapver = "1.0.0"
+bootstrapver = "1.0.1"
 
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
 end
 
 -- Set server script URL
-serverscripturl = "http://gs2012.xyz/3ds/corbenikupdaterre/index-server.lua"
+stableserverscripturl = "http://gs2012.xyz/3ds/corbenikupdaterre/index-server.lua"
+nightlyserverscripturl = "http://gs2012.xyz/3ds/corbenikupdaterre/cure-nightly.lua"
 servercia = "http://gs2012.xyz/3ds/corbenikupdaterre/updater.cia"
 
 -- Create directories
@@ -19,12 +20,19 @@ System.createDirectory("/corbenik-updater-re")
 System.createDirectory("/corbenik-updater-re/settings")
 System.createDirectory("/corbenik-updater-re/resources")
 
--- Download server script
-if System.doesFileExist("/corbenik-updater-re/index-server.lua") then
-	System.deleteFile("/corbenik-updater-re/index-server.lua")
+
+-- Check if user is in devmode or no (to either use index-server.lua or cure-nightly.lua)
+if System.doesFileExist("/corbenik-updater-re/settings/devmode") then
+	serverscripturl = nightlyserverscripturl
+else
+	serverscripturl = stableserverscripturl
 end
-Network.downloadFile(serverscripturl, "/corbenik-updater-re/index-server.lua")
+-- Download server script
+if System.doesFileExist("/corbenik-updater-re/cure.lua") then
+	System.deleteFile("/corbenik-updater-re/cure.lua")
+end
+Network.downloadFile(serverscripturl, "/corbenik-updater-re/cure.lua")
 
 -- Run server script
-dofile("/corbenik-updater-re/index-server.lua")
+dofile("/corbenik-updater-re/cure.lua")
 System.exit()
