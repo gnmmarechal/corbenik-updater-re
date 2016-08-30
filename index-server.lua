@@ -188,22 +188,39 @@ function precleanup()
 end
 
 -- Prechecks
-function readconfig(cfgpath)
-	if System.doesFileExist(cfgpath) then
-		configstream = io.open(cfgpath,FREAD)
-		armpayloadpath = io.read(configstream,0,io.size(configstream))
-		if (not System.doesFileExist(armpayloadpath)) then
+function readconfig(cfgpath, cfw)
+	if System.doesFileExist(cfgpath) then -- If there is a config file
+		configstream = io.open(cfgpath, FREAD)
+		local temppayloadpath = io.read(configstream,0,io.size(configstream))
+		io.close(configstream)		
+		-- Check if payload exixts
+		if not temppayloadpath == nil then
+			if System.doesFileExist(temppayloadpath) then
+				-- File exists
+			else
+				System.deleteFile(cfgpath)
+				readconfig(cfgpath, cfw)
+			end
+		else
 			System.deleteFile(cfgpath)
-			readconfig(cfgpath)
+			readconfig(cfgpath, cfw)
 		end
-	else
-		armpayloadpath = "/arm9loaderhax.bin"
-		if System.doesFileExist("/arm9loaderhax_si.bin") then
-			setconfigstream = io.open(config,FCREATE)
-			io.write(setconfigstream,0,"/arm9loaderhax_si.bin", 21)
-			io.close(setconfigstream)
-			readconfig(cfgpath) --Calls itself again after setting the payload path to arm9loaderhax_si.bin.
+		-- Set arm9loaderhax payload path
+		if cfw == "corbenik" then
+			corbenikarmpayloadpath = temppayloadpath
+		else
+			skeitharmpayloadpath = temppayloadpath
 		end
+	else -- if no config is available, set this to default values (/arm9loaderhax.bin or /arm9loaderhax_si.bin)
+		local temppayloadpath = "/arm9loaderhax.bin"
+		if System.doesFileExist("/arm9loaderhax_si.bin") then -- Prefer SI A9LH payload to standard path
+			temppayloadpath = "/arm9loaderhax_si.bin"
+		end
+		if cfw == "corbenik" then
+			corbenikarmpayloadpath = temppayloadpath
+		else
+			skeitharmpayloadpath = temppayloadpath
+		end	
 	end
 end
 
@@ -215,8 +232,8 @@ function precheck()
 	else
 		newconsole = 0
 	end
-	readconfig(corbenikcfgpath)
-	readconfig(skeithcfgpath)
+	readconfig(corbenikcfgpath, "corbenik")
+	readconfig(skeithcfgpath, "skeith")
 end
 
 function installcfw(cfwpath, keepconfig) -- used as "installcfw("/corbenik", 1)", for example, for a Corbenik  installation that keeps old config
