@@ -17,10 +17,17 @@ echo Creating romfs file from directory...
 tools\3dstool -cvtf romfs romfs.bin --romfs-dir romfs
 ::Create icon and banner from files
 echo Creating banner from files...
-tools\bannertool makebanner -i ../buildres/banner.png -a ../buildres/audio.wav -o res/banner.bin
+copy ..\buildres\banner.png banner.png
+copy ..\buildres\audio.wav audio.wav
+tools\bannertool makebanner -i banner.png -a audio.wav -o res/banner.bin
 echo Creating icon from file...
-tools\bannertool makesmdh -s "Corbenik CFW Updater: RE" -l "Corbenik/Skeith CFW Updater: RE" -p "gnmmarechal" -i ../buildres/icon.png -o res/icon.bin
+copy ..\buildres\icon.png icon.png
+tools\bannertool makesmdh -s "Corbenik CFW Updater: RE" -l "Corbenik/Skeith CFW Updater: RE" -p "gnmmarechal" -i icon.png -o res/icon.bin
 echo Creating target 1 CIA (Standard Edition)...
 ::Create CIA for regular edition
 tools\makerom -f cia -o ../CorbenikCFWUpdaterRE.cia -elf bin/lpp-3ds-forcedsp.elf -rsf corbenikupdaterre.rsf -icon res/icon.bin -banner res/banner.bin -exefslogo -target t -romfs romfs.bin
 echo Created all targets.
+del banner.png
+del audio.wav
+del icon.png
+cd ..

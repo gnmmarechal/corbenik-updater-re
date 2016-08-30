@@ -26,8 +26,11 @@ del *.bin
 cd res
 del *.bin
 cd ..
+del banner.png
+del audio.wav
+del icon.png
 cd romfs
 del *.wav
 del *.lua
-cd ..
+cd ..\..
 exit /b
