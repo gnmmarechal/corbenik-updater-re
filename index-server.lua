@@ -354,7 +354,7 @@ function isdirtyupdate() -- Checks whether to keep config or not and sets the va
 end
 
 function bgmtogglecheck() -- Checks for KEY_L and toggles BGM usage (requires restart of the updater to take effect)
-	if Controls.check(pad, KEY_L) and not Controls.check(pad, KEY_L) then
+	if Controls.check(pad, KEY_SELECT) and not Controls.check(oldpad, KEY_SELECT) then
 		if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
 			System.deleteFile("/corbenik-updater-re/settings/usebgm")
 		else

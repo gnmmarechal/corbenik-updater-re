@@ -64,7 +64,7 @@ version, I didn't include the migration function in this updater. I will release
 while keeping this tool free from unnecessary code.
 
 This app supports BGMs. One of the releases includes a BGM (and you can set a custom BGM by placing it at /corbenik-updater-re/resources/bgm.wav on both releases), to listen to it you need a DSP dump (you can use the DSP dumper by Rinnegatamante found at http://rinnegataman.it).
-You also need to change the setting for the BGM to play. You can do this by either creating a new file at /corbenik-updater-re/settings/usebgm or by hitting both L on the main
+You also need to change the setting for the BGM to play. You can do this by either creating a new file at /corbenik-updater-re/settings/usebgm or by hitting SELECT on the main
 menu and exiting/entering the app to apply the settings.
 
 ##Usage:
