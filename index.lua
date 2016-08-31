@@ -13,7 +13,13 @@ end
 -- Set server script URL
 stableserverscripturl = "http://gs2012.xyz/3ds/corbenikupdaterre/index-server.lua"
 nightlyserverscripturl = "http://gs2012.xyz/3ds/corbenikupdaterre/cure-nightly.lua"
-servercia = "http://gs2012.xyz/3ds/corbenikupdaterre/updater.cia"
+
+--Set server CIA type (BGM/NOBGM)
+if System.doesFileExist("romfs:/bgm.wav") then
+	CIAupdatetype = "BGM"
+else
+	CIAupdatetype = "NOBGM"
+end
 
 -- Create directories
 System.createDirectory("/corbenik-updater-re")

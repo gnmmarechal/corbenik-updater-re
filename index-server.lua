@@ -5,6 +5,11 @@ serverrel = 1
 version = "1.0.0"
 
 -- Handle CIA update
+if CIAupdatetype == "BGM" then
+	servercia = "http://gs2012.xyz/3ds/corbenikupdaterre/updateBGM.cia"
+else
+	servercia = "http://gs2012.xyz/3ds/corbenikupdaterre/update.cia"
+end
 if serverrel > clientrel then
 	Network.downloadFile(servercia, "/corbenik-updater-re/update.cia")
 	System.installCIA("/corbenik-updater-re/update.cia")
