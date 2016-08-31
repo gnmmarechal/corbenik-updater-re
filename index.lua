@@ -1,4 +1,4 @@
---Corbenik/Skeith CFW Updater: RE - Client Script
+--Corbenik/Skeith CFW Updater: RE - Client Script (CORE)
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 

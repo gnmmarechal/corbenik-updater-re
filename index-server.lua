@@ -1,4 +1,4 @@
---Corbenik/Skeith CFW Updater: RE - Server Script
+--Corbenik/Skeith CFW Updater: RE - Server Script (CURE)
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 serverrel = 1
@@ -380,20 +380,26 @@ function bottomscreen() -- Bottom Screen
 		debugWrite(0,0, "Latest Corbenik CFW: v"..corbenikver, green, BOTTOM_SCREEN)
 		debugWrite(0,20, "Latest Skeith CFW: "..skeithver, green, BOTTOM_SCREEN)
 		debugWrite(0,40, "==============================", red, BOTTOM_SCREEN)
-		debugWrite(0,60, "Author: gnmmarechal", white, BOTTOM_SCREEN)
-		debugWrite(0,80, "Special Thanks:", white, BOTTOM_SCREEN)
-		debugWrite(0,100, "Crystal the Glaceon (Tester)", white, BOTTOM_SCREEN)
-		debugWrite(0,120, "chaoskagami (CFW Developer)", white, BOTTOM_SCREEN)
-		debugWrite(0,140, "Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)
+		debugWrite(0,60, "CURE Version: "..version, white, BOTTOM_SCREEN)
+		debugWrite(0,80, "CORE Version"..bootstrapver, white, BOTTOM_SCREEN)
+		debugWrite(0,100, "==============================", red, BOTTOM_SCREEN)
+		debugWrite(0,120, "Author: gnmmarechal", white, BOTTOM_SCREEN)
+		debugWrite(0,140, "Special Thanks:", white, BOTTOM_SCREEN)
+		debugWrite(0,160, "Crystal the Glaceon (Tester)", white, BOTTOM_SCREEN)
+		debugWrite(0,180, "chaoskagami (CFW Developer)", white, BOTTOM_SCREEN)
+		debugWrite(0,200, "Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)
 	end
 	Screen.debugPrint(0,0, "Latest Corbenik CFW: v"..corbenikver, green, BOTTOM_SCREEN)
 	Screen.debugPrint(0,20, "Latest Skeith CFW: "..skeithver, green, BOTTOM_SCREEN)
 	Screen.debugPrint(0,40, "==============================", red, BOTTOM_SCREEN)
-	Screen.debugPrint(0,60, "Author: gnmmarechal", white, BOTTOM_SCREEN)
-	Screen.debugPrint(0,80, "Special Thanks:", white, BOTTOM_SCREEN)
-	Screen.debugPrint(0,100, "Crystal the Glaceon (Tester)", white, BOTTOM_SCREEN)
-	Screen.debugPrint(0,120, "chaoskagami (CFW Developer)", white, BOTTOM_SCREEN)
-	Screen.debugPrint(0,140, "Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)	
+	Screen.debugPrint(0,60, "CURE Version: "..version, white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,80, "CORE Version"..bootstrapver, white, BOTTOM_SCREEN)	
+	Screen.debugPrint(0,100, "==============================", red, BOTTOM_SCREEN)	
+	Screen.debugPrint(0,120, "Author: gnmmarechal", white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,140, "Special Thanks:", white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,160, "Crystal the Glaceon (Tester)", white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,180, "chaoskagami (CFW Developer)", white, BOTTOM_SCREEN)
+	Screen.debugPrint(0,200, "Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)	
 end
 
 function firstscreen() -- scr == 1 | First UI screen, main menu
