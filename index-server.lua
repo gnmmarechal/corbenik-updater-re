@@ -492,7 +492,6 @@ while true do
 	elseif scr == 2 then
 		installer("/corbenik")
 	elseif scr == 1 then
-		error("Corbenik: "..corbenikarmpayloadpath)
 		firstscreen()
 	end
 	
