@@ -80,6 +80,7 @@ white = Color.new(255,255,255)
 green = Color.new(0,240,32)
 red = Color.new(255,0,0)
 yellow = Color.new(255,255,0)
+black = Color.new(0,0,0)
 
 -- File URLs
 baseserver = "http://gs2012.xyz/3ds/corbenikupdaterre"
@@ -244,6 +245,8 @@ end
 function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for example, for a Corbenik  installation that keeps old config
 	headflip = 1
 	head()
+	-- Lazy fix for B) Quit
+	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
 	-- Installer
 	if cfwpath == "/corbenik" then
 		cfwname = "Corbenik"
@@ -435,10 +438,10 @@ function firstscreen() -- scr == 1 | First UI screen, main menu
 	inputscr(-1, KEY_B)
 end
 
-function installer(cfwpath, mode) -- scr == 2/3 | Installation UI screen
+function installer(cfwpath) -- scr == 2/3 | Installation UI screen
 	head()
 	debugWrite(0, 40, "Started installation of CFW...", white, TOP_SCREEN)
-	installcfw(cfwpath, mode)
+	installcfw(cfwpath)
 	inputscr(-1, KEY_B) -- Checks for exit
 	inputscr(-2, KEY_A) -- Checks for reboot
 end
