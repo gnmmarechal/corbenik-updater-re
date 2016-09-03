@@ -254,11 +254,13 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 		cfwurl = skeithurl
 		armpayloadpath = skeitharmpayloadpath
 	end
+	-- Check for configkeep variable
 	if configkeep == 1 then
 		keepconfig = 1
 		else
 		keepconfig = 0
 	end
+	
 	debugWrite(0,60,"Downloading "..cfwname.." CFW ZIP...", white, TOP_SCREEN)
 	if updated == 0 then -- Download the file
 		Network.downloadFile(cfwurl, localzip)
@@ -453,12 +455,12 @@ while true do
 	isdirtyupdate()
 	bgmtogglecheck()
 	-- Actual UI screens and installer phases
-	if scr == 1 then
-		firstscreen()
+	if scr == 3 then
+		installer("/skeith")
 	elseif scr == 2 then
 		installer("/corbenik")
-	elseif scr == 3 then
-		installer("/skeith")
+	elseif scr == 1 then
+		firstscreen()
 	end
 	
 	flip()
