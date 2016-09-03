@@ -241,7 +241,7 @@ function precheck()
 	readconfig(skeithcfgpath, "skeith")
 end
 
-function installcfw(cfwpath, keepconfig) -- used as "installcfw("/corbenik", 1)", for example, for a Corbenik  installation that keeps old config
+function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for example, for a Corbenik  installation that keeps old config
 	headflip = 1
 	head()
 	-- Installer
@@ -253,6 +253,11 @@ function installcfw(cfwpath, keepconfig) -- used as "installcfw("/corbenik", 1)"
 		cfwname = "Skeith"
 		cfwurl = skeithurl
 		armpayloadpath = skeitharmpayloadpath
+	end
+	if configkeep == 1 then
+		keepconfig = 1
+		else
+		keepconfig = 0
 	end
 	debugWrite(0,60,"Downloading "..cfwname.." CFW ZIP...", white, TOP_SCREEN)
 	if updated == 0 then -- Download the file
@@ -348,10 +353,12 @@ function isdirtyupdate() -- Checks whether to keep config or not and sets the va
 	if Controls.check(pad, KEY_R) and not Controls.check(oldpad, KEY_R) then
 		if configkeep == 1 then
 			configkeep = 0
+			keepconfig = 0
 			-- Delete config setting for this option
 			System.deleteFile("/corbenik-updater-re/settings/keepconfig")
 		else
 			configkeep = 1
+			keepconfig = 1
 			-- Create config option for this option to be saved upon exit and restart
 			confsettingstream = io.open("/corbenik-updater-re/settings/keepconfig",FCREATE)
 			io.write(confsettingstream,0,"Keep Config", 11)
@@ -400,7 +407,7 @@ function bottomscreen() -- Bottom Screen
 	Screen.debugPrint(0,20, "Latest Skeith CFW: "..skeithver, green, BOTTOM_SCREEN)
 	Screen.debugPrint(0,40, "==============================", red, BOTTOM_SCREEN)
 	Screen.debugPrint(0,60, "CURE Version: "..version, white, BOTTOM_SCREEN)
-	Screen.debugPrint(0,80, "CORE Version"..bootstrapver, white, BOTTOM_SCREEN)	
+	Screen.debugPrint(0,80, "CORE Version: "..bootstrapver, white, BOTTOM_SCREEN)	
 	Screen.debugPrint(0,100, "==============================", red, BOTTOM_SCREEN)	
 	Screen.debugPrint(0,120, "Author: gnmmarechal", white, BOTTOM_SCREEN)
 	Screen.debugPrint(0,140, "Special Thanks:", white, BOTTOM_SCREEN)
@@ -449,9 +456,9 @@ while true do
 	if scr == 1 then
 		firstscreen()
 	elseif scr == 2 then
-		installer("/corbenik", configkeep)
+		installer("/corbenik")
 	elseif scr == 3 then
-		installer("/skeith", configkeep)
+		installer("/skeith")
 	end
 	
 	flip()
