@@ -248,9 +248,11 @@ function installcfw(cfwpath, keepconfig) -- used as "installcfw("/corbenik", 1)"
 	if cfwpath == "/corbenik" then
 		cfwname = "Corbenik"
 		cfwurl = corbenikurl
+		armpayloadpath = corbenikarmpayloadpath
 	elseif cfwpath == "/skeith" then
 		cfwname = "Skeith"
 		cfwurl = skeithurl
+		armpayloadpath = skeitharmpayloadpath
 	end
 	debugWrite(0,60,"Downloading "..cfwname.." CFW ZIP...", white, TOP_SCREEN)
 	if updated == 0 then -- Download the file
@@ -386,7 +388,7 @@ function bottomscreen() -- Bottom Screen
 		debugWrite(0,20, "Latest Skeith CFW: "..skeithver, green, BOTTOM_SCREEN)
 		debugWrite(0,40, "==============================", red, BOTTOM_SCREEN)
 		debugWrite(0,60, "CURE Version: "..version, white, BOTTOM_SCREEN)
-		debugWrite(0,80, "CORE Version"..bootstrapver, white, BOTTOM_SCREEN)
+		debugWrite(0,80, "CORE Version: "..bootstrapver, white, BOTTOM_SCREEN)
 		debugWrite(0,100, "==============================", red, BOTTOM_SCREEN)
 		debugWrite(0,120, "Author: gnmmarechal", white, BOTTOM_SCREEN)
 		debugWrite(0,140, "Special Thanks:", white, BOTTOM_SCREEN)
