@@ -195,6 +195,35 @@ end
 
 -- Prechecks
 function readconfig(cfgpath, cfw)
+	-- Checks for a config file
+	if System.doesFileExist(cfgpath) then
+		configstream = io.open(cfgpath, FREAD)
+		temppayloadpath = io.read(configstream,0,io.size(configstream))
+		io.close(configstream)
+		if not System.doesFileExist(temppayloadpath) then
+			-- File doesn't exist
+			System.deleteFile(cfgpath)
+			readconfig(cfgpath, cfw)
+		end
+		if cfw == "corbenik" then
+			corbenikarmpayloadpath = temppayloadpath
+		else
+			skeitharmpayloadpath = temppayloadpath
+		end
+	else
+		temppayloadpath = "/arm9loaderhax.bin"
+		if System.doesFileExist("/arm9loaderhax_si.bin") then
+			temppayloadpath = "/arm9loaderhax_si.bin"
+		end
+		if cfw == "corbenik" then
+			corbenikarmpayloadpath = temppayloadpath
+		else
+			skeitharmpayloadpath = temppayloadpath
+		end
+	end
+end
+--[[
+function readconfig(cfgpath, cfw)
 	if System.doesFileExist(cfgpath) then -- If there is a config file
 		configstream = io.open(cfgpath, FREAD)
 		local temppayloadpath = io.read(configstream,0,io.size(configstream))
@@ -229,7 +258,7 @@ function readconfig(cfgpath, cfw)
 		end	
 	end
 end
-
+--]]
 function precheck()
 	--Check model, if N3DS, set clock to 804MHz
 	if System.getModel() == 2 or System.getModel() == 4 then
@@ -463,6 +492,7 @@ while true do
 	elseif scr == 2 then
 		installer("/corbenik")
 	elseif scr == 1 then
+		error("Corbenik: "..corbenikarmpayloadpath)
 		firstscreen()
 	end
 	
