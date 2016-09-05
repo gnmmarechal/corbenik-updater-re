@@ -1,8 +1,11 @@
 --Corbenik/Skeith CFW Updater: RE - Server Script (CURE)
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
-serverrel = 1
-version = "1.0.0"
+serverrel = 2
+version = "1.0.1"
+if devmode == 1 then -- This will differentiate between stable and devscripts.
+	version = version.."-D"
+end
 
 -- Handle CIA update
 if CIAupdatetype == "BGM" then
