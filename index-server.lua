@@ -15,7 +15,7 @@ else
 end
 if serverrel > clientrel then
 	Network.downloadFile(servercia, "/corbenik-updater-re/update.cia")
-	System.installCIA("/corbenik-updater-re/update.cia")
+	System.installCIA("/corbenik-updater-re/update.cia", SDMC)
 	System.deleteFile("/corbenik-updater-re/update.cia")
 	error("Updated. Please close the app and re-open.")
 end
