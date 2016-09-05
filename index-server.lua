@@ -6,8 +6,12 @@ version = "1.0.1"
 if devmode == 1 then -- This will differentiate between stable and devscripts.
 	version = version.."-D"
 end
-
--- Handle CIA update
+-- Handle Outdated CIA Notification
+if serverrel > clientrel then
+	error("New CORE CIA available. Please update.")
+end
+-- Handle CIA update (Currently disabled)
+--[[
 if CIAupdatetype == "BGM" then
 	servercia = "http://gs2012.xyz/3ds/corbenikupdaterre/updateBGM.cia"
 else
@@ -19,7 +23,7 @@ if serverrel > clientrel then
 	System.deleteFile("/corbenik-updater-re/update.cia")
 	error("Updated. Please close the app and re-open.")
 end
-
+--]]
 -- Settings checks
 if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
 	usebgm = 1
