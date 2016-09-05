@@ -281,8 +281,9 @@ end
 function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for example, for a Corbenik  installation that keeps old config
 	headflip = 1
 	head()
-	-- Lazy fix for B) Quit
+	-- Lazy fixes
 	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
+	Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)
 	-- Installer
 	if cfwpath == "/corbenik" then
 		cfwname = "Corbenik"
