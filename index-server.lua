@@ -229,43 +229,7 @@ function readconfig(cfgpath, cfw)
 		end
 	end
 end
---[[
-function readconfig(cfgpath, cfw)
-	if System.doesFileExist(cfgpath) then -- If there is a config file
-		configstream = io.open(cfgpath, FREAD)
-		local temppayloadpath = io.read(configstream,0,io.size(configstream))
-		io.close(configstream)		
-		-- Check if payload exixts
-		if not temppayloadpath == nil then
-			if System.doesFileExist(temppayloadpath) then
-				-- File exists
-			else
-				System.deleteFile(cfgpath)
-				readconfig(cfgpath, cfw)
-			end
-		else
-			System.deleteFile(cfgpath)
-			readconfig(cfgpath, cfw)
-		end
-		-- Set arm9loaderhax payload path
-		if cfw == "corbenik" then
-			corbenikarmpayloadpath = temppayloadpath
-		else
-			skeitharmpayloadpath = temppayloadpath
-		end
-	else -- if no config is available, set this to default values (/arm9loaderhax.bin or /arm9loaderhax_si.bin)
-		local temppayloadpath = "/arm9loaderhax.bin"
-		if System.doesFileExist("/arm9loaderhax_si.bin") then -- Prefer SI A9LH payload to standard path
-			temppayloadpath = "/arm9loaderhax_si.bin"
-		end
-		if cfw == "corbenik" then
-			corbenikarmpayloadpath = temppayloadpath
-		else
-			skeitharmpayloadpath = temppayloadpath
-		end	
-	end
-end
---]]
+
 function precheck()
 	--Check model, if N3DS, set clock to 804MHz
 	if System.getModel() == 2 or System.getModel() == 4 then
