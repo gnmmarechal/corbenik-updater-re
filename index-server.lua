@@ -101,6 +101,30 @@ skeithurl = Network.requestString(latestskeithzip)
 corbenikver = Network.requestString(latestcorbenikverurl)
 skeithver = Network.requestString(latestskeithverurl)
 
+-- Required FIRM files URLs
+
+-- Old 3DS
+old =
+{
+	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000052"
+	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/cetk"
+	twl = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/00000016"
+	twlcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/cetk"
+	agb = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000202/0000000B"
+	agbcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000202/cetk"
+}
+
+-- New 3DS
+new =
+{
+	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000021"
+	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/cetk"
+	twl = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000102/00000000"
+	twlcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000102/cetk"
+	agb = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000202/00000000"
+	agbcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000202/cetk"
+}
+
 -- More vars
 localzip = "/corbenik-updater-re/resources/cfw.zip"
 
@@ -242,6 +266,105 @@ function precheck()
 	readconfig(skeithcfgpath, "skeith")
 end
 
+function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
+	headflip = 1
+	head()
+	-- Lazy fixes
+	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
+	Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)
+	-- Installer
+	if cfwpath == "/corbenik" then
+		cfwname = "Corbenik"
+		cfwurl = corbenikurl
+		armpayloadpath = corbenikarmpayloadpath
+		dl =
+		{
+			native = old.native
+			nativecetk = old.nativecetk
+			twl = old.twl
+			twlcetk = old.twlcetk
+			agb = old.agb
+			agbcetk = old.agbcetk
+		}
+	elseif cfwpath == "/skeith" then
+		cfwname = "Skeith"
+		cfwurl = skeithurl
+		armpayloadpath = skeitharmpayloadpath
+		dl =
+		{
+			native = new.native
+			nativecetk = new.nativecetk
+			twl = new.twl
+			twlcetk = new.twlcetk
+			agb = new.agb
+			agbcetk = new.agbcetk
+		}
+	end
+	paths =
+	{
+		native = cfwpath.."/lib/firmware/native"
+		nativecetk = cfwpath.."/share/keys/native.cetk"
+		twl = cfwpath.."/lib/firmware/twl"
+		twlcetk = cfwpath.."/share/keys/twl.cetk"
+		agb = cfwpath.."/lib/firmware/agb"
+		agbcetk = cfwpath.."/share/keys/agb.cetk"
+	}
+	
+	-- Download CFW ZIP
+	debugWrite(0,60,"Downloading "..cfwname.." CFW ZIP...", white, TOP_SCREEN)
+	if updated == 0 then
+		Network.downloadFile(cfwurl, localzip)
+	end
+	
+	-- Extract CFW to its directory
+	debugWrite(0,80,"Extracting CFW files...", white, TOP_SCREEN)
+	if updated == 0 then
+		-- Renames arm9loaderhax payload to something else to prevent it from being overwritten by the ZIP extraction
+		System.renameFile("/arm9loaderhax.bin", "/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
+		System.renameFile("/arm9loaderhax_si.bin", "/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
+		-- Extracts the CFW's ZIP package
+		System.extractZIP(localzip, "/")
+		-- Deletes the arm9loaderhax payload that was extracted.
+		System.deleteFile("/arm9loaderhax.bin")
+		-- Extracts the payload to its path (according to config or default path)
+		System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
+		-- If default path wasn't one of the standard A9LH paths, rename the previously backed up files to standard.
+		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") then
+			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
+			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
+		end
+		-- Post-installation cleanup
+		System.deleteFile(localzip)
+		-- Clean files that were in the package and are not needed.
+		if System.doesFileExist("/README.md") then
+			System.deleteFile("/README.md")
+		end
+		if System.doesFileExist("/LICENSE.txt") then
+			System.deleteFile("/LICENSE.txt")
+		end
+		if System.doesFileExist("/generate_localeemu.sh") then
+			System.deleteFile("/generate_localeemu.sh")
+		end
+		if System.doesFileExist("/n3ds_firm.sh") then
+			System.deleteFile("/n3ds_firm.sh")
+		end
+		if System.doesFileExist("/o3ds_firm.sh") then
+			System.deleteFile("/o3ds_firm.sh")
+		end
+	end	
+	-- Download FIRM, CETKs, etc.
+	debugWrite(0,100,"Downloading required files...", white, TOP_SCREEN)	
+	if updated == 0 then
+		Network.downloadFile(dl.native, paths.native)
+		Network.downloadFile(dl.nativecetk, paths.nativecetk)
+		Network.downloadFile(dl.twl, paths.twl)
+		Network.downloadFile(dl.twlcetk, paths.twlcetk)
+		Network.downloadFile(dl.agb, paths.agb)
+		Network.downloadFile(dl.agbcetk, paths.agbcetk)		
+	end	
+	debugWrite(0,120,"Installed. Press A to reboot or B to quit!", green, TOP_SCREEN)
+	updated = 1	
+end
 function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for example, for a Corbenik  installation that keeps old config
 	headflip = 1
 	head()
