@@ -2,7 +2,7 @@
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 serverrel = 2
-version = "1.0.1"
+version = "1.1.0"
 if devmode == 1 then -- This will differentiate between stable and devscripts.
 	version = version.."-D"
 end
@@ -32,9 +32,6 @@ if not System.doesFileExist("/skeith/lib/firmware/native") then
 else
 	showskeith = 1
 end
-if ((showcorbenik == 0)and(showskeith == 0)) then
-	error("Corbenik/Skeith CFW not found.") -- Errors if neither Skeith nor Corbenik are found.
-end	
 if usebgm == 1 then
 	--Check for existence of DSP firm dump, if not, disable BGM.
 	if not System.doesFileExist("/3ds/dspfirm.cdc") then
@@ -257,8 +254,11 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 	head()
 	-- Lazy fixes
 	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
-	Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)
-	Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", black, TOP_SCREEN)
+	if showskeith == 0 then
+		Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", black, TOP_SCREEN)
+	else
+		Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)		
+	end	
 	-- Installer
 	if cfwpath == "/corbenik" then
 		cfwname = "Corbenik"
@@ -295,11 +295,13 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		twlcetk = cfwpath.."/share/keys/twl.cetk",
 		agb = cfwpath.."/lib/firmware/agb",
 		agbcetk = cfwpath.."/share/keys/agb.cetk"
-	}
+	}	
 	
 	-- Download CFW ZIP
 	debugWrite(0,60,"Downloading "..cfwname.." CFW ZIP...", white, TOP_SCREEN)
 	if updated == 0 then
+		h,m,s = System.getTime()
+		day_value,day,month,year = System.getDate()	
 		Network.downloadFile(cfwurl, localzip)
 	end
 	
@@ -357,8 +359,11 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 	head()
 	-- Lazy fixes
 	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
-	Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)
-	Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", black, TOP_SCREEN)	
+	if showskeith == 0 then
+		Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", black, TOP_SCREEN)
+	else
+		Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)		
+	end
 	-- Installer
 	if cfwpath == "/corbenik" then
 		cfwname = "Corbenik"
@@ -549,7 +554,7 @@ function firstscreen() -- scr == 1 | First UI screen, main menu
 		Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", white, TOP_SCREEN)
 		inputscr(3, KEY_X)
 	else
-		Screen.debugPrint(0, 160,"A) Install stable - Skeith CFW", white, TOP_SCREEN)
+		Screen.debugPrint(0, 160,"X) Install nightly - Skeith CFW", white, TOP_SCREEN)
 		inputscr(5, KEY_X)		
 	end
 	Screen.debugPrint(0,180,"B) Quit", white, TOP_SCREEN)
