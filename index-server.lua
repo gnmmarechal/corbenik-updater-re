@@ -272,6 +272,7 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 	-- Lazy fixes
 	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
 	Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)
+	Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", black, TOP_SCREEN)
 	-- Installer
 	if cfwpath == "/corbenik" then
 		cfwname = "Corbenik"
@@ -371,6 +372,7 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 	-- Lazy fixes
 	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
 	Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)
+	Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", black, TOP_SCREEN)	
 	-- Installer
 	if cfwpath == "/corbenik" then
 		cfwname = "Corbenik"
@@ -551,12 +553,15 @@ function firstscreen() -- scr == 1 | First UI screen, main menu
 	Screen.debugPrint(0,100,"Please select an option:", white, TOP_SCREEN)
 	Screen.debugPrint(0,120,"Keep Config (Press R): "..configkept, white, TOP_SCREEN)
 	if showcorbenik == 1 then
-		Screen.debugPrint(0,140,"A) Update stable - Corbenik CFW", white, TOP_SCREEN)
+		Screen.debugPrint(0, 140,"A) Update stable - Corbenik CFW", white, TOP_SCREEN)
 		inputscr(2, KEY_A)
+	else
+		Screen.debugPrint(0, 140,"A) Install stable - Corbenik CFW", white, TOP_SCREEN)
+		inputscr(4, KEY_A)
 	end
 	if showskeith == 1 then
-		Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", white, TOP_SCREEN)
-		inputscr(3, KEY_X)
+		Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", white, TOP_SCREEN)
+		inputscr(5, KEY_X)
 	end
 	Screen.debugPrint(0,180,"B) Quit", white, TOP_SCREEN)
 	inputscr(-1, KEY_B)
