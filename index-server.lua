@@ -106,22 +106,22 @@ skeithver = Network.requestString(latestskeithverurl)
 -- Old 3DS
 old =
 {
-	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000052"
-	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/cetk"
-	twl = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/00000016"
-	twlcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/cetk"
-	agb = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000202/0000000B"
+	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000052",
+	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/cetk",
+	twl = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/00000016",
+	twlcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/cetk",
+	agb = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000202/0000000B",
 	agbcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000202/cetk"
 }
 
 -- New 3DS
 new =
 {
-	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000021"
-	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/cetk"
-	twl = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000102/00000000"
-	twlcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000102/cetk"
-	agb = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000202/00000000"
+	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000021",
+	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/cetk",
+	twl = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000102/00000000",
+	twlcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000102/cetk",
+	agb = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000202/00000000",
 	agbcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000202/cetk"
 }
 
@@ -280,11 +280,11 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		armpayloadpath = corbenikarmpayloadpath
 		dl =
 		{
-			native = old.native
-			nativecetk = old.nativecetk
-			twl = old.twl
-			twlcetk = old.twlcetk
-			agb = old.agb
+			native = old.native,
+			nativecetk = old.nativecetk,
+			twl = old.twl,
+			twlcetk = old.twlcetk,
+			agb = old.agb,
 			agbcetk = old.agbcetk
 		}
 	elseif cfwpath == "/skeith" then
