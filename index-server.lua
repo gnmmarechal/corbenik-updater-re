@@ -289,11 +289,11 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 	end
 	paths =
 	{
-		native = cfwpath.."/lib/firmware/native"
-		nativecetk = cfwpath.."/share/keys/native.cetk"
-		twl = cfwpath.."/lib/firmware/twl"
-		twlcetk = cfwpath.."/share/keys/twl.cetk"
-		agb = cfwpath.."/lib/firmware/agb"
+		native = cfwpath.."/lib/firmware/native",
+		nativecetk = cfwpath.."/share/keys/native.cetk",
+		twl = cfwpath.."/lib/firmware/twl",
+		twlcetk = cfwpath.."/share/keys/twl.cetk",
+		agb = cfwpath.."/lib/firmware/agb",
 		agbcetk = cfwpath.."/share/keys/agb.cetk"
 	}
 	
