@@ -547,7 +547,10 @@ function firstscreen() -- scr == 1 | First UI screen, main menu
 	end
 	if showskeith == 1 then
 		Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", white, TOP_SCREEN)
-		inputscr(5, KEY_X)
+		inputscr(3, KEY_X)
+	else
+		Screen.debugPrint(0, 140,"A) Install stable - Skeith CFW", white, TOP_SCREEN)
+		inputscr(5, KEY_X)		
 	end
 	Screen.debugPrint(0,180,"B) Quit", white, TOP_SCREEN)
 	inputscr(-1, KEY_B)
