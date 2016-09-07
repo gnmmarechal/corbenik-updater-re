@@ -584,6 +584,7 @@ while true do
 	isdirtyupdate()
 	bgmtogglecheck()
 	-- Actual UI screens and installer phases
+	
 	if scr == 3 then
 		installer("/skeith")
 	elseif scr == 2 then
