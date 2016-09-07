@@ -10,20 +10,6 @@ end
 if serverrel > clientrel then
 	error("New CORE CIA available. Please update.")
 end
--- Handle CIA update (Currently disabled)
---[[
-if CIAupdatetype == "BGM" then
-	servercia = "http://gs2012.xyz/3ds/corbenikupdaterre/updateBGM.cia"
-else
-	servercia = "http://gs2012.xyz/3ds/corbenikupdaterre/update.cia"
-end
-if serverrel > clientrel then
-	Network.downloadFile(servercia, "/corbenik-updater-re/update.cia")
-	System.installCIA("/corbenik-updater-re/update.cia", SDMC)
-	System.deleteFile("/corbenik-updater-re/update.cia")
-	error("Updated. Please close the app and re-open.")
-end
---]]
 -- Settings checks
 if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
 	usebgm = 1
