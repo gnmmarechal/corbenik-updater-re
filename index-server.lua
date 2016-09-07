@@ -570,6 +570,14 @@ function installer(cfwpath) -- scr == 2/3 | Installation UI screen
 	inputscr(-2, KEY_A) -- Checks for reboot
 end
 
+function newinstaller(cfwpath) -- scr = 4/5 | Installation UI Screen (FRESH)
+	head()
+	debugWrite(0, 40, "Started fresh installation of CFW...", white, TOP_SCREEN)
+	freshinstall(cfwpath)
+	inputscr(-1, KEY_B)
+	inputscr(-2, KEY_A)
+end	
+
 -- Main Loop
 precheck()
 precleanup()
@@ -586,6 +594,10 @@ while true do
 		installer("/skeith")
 	elseif scr == 2 then
 		installer("/corbenik")
+	elseif scr == 4 then
+		newinstaller("/corbenik")
+	elseif scr == 5 then
+		newinstaller("/skeith")
 	elseif scr == 1 then
 		firstscreen()
 	end
