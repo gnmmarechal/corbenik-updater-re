@@ -293,11 +293,11 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		armpayloadpath = skeitharmpayloadpath
 		dl =
 		{
-			native = new.native
-			nativecetk = new.nativecetk
-			twl = new.twl
-			twlcetk = new.twlcetk
-			agb = new.agb
+			native = new.native,
+			nativecetk = new.nativecetk,
+			twl = new.twl,
+			twlcetk = new.twlcetk,
+			agb = new.agb,
 			agbcetk = new.agbcetk
 		}
 	end
