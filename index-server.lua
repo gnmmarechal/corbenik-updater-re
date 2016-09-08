@@ -318,7 +318,7 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		-- Extracts the payload to its path (according to config or default path)
 		System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
 		-- If default path wasn't one of the standard A9LH paths, rename the previously backed up files to standard.
-		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") then
+		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") and not System.doesFileExist("/homebrew/3ds/boot.bin") then
 			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
 			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
 		end
@@ -406,7 +406,7 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 		-- Extracts the payload to its path (according to config or default path)
 		System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
 		-- If default path wasn't one of the standard A9LH paths, rename the previously backed up files to standard.
-		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") then
+		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") and not System.doesFileExist("/homebrew/3ds/boot.bin") then
 			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
 			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
 		end
