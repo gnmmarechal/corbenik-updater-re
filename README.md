@@ -18,7 +18,7 @@ exact same or very similar to the original, this is slightly better organized.
 
 ##What is this?
 
-Corbenik CFW Updater: RE is a tool designed to update Corbenik CFW (https://github.com/chaoskagami/corbenik) and its nightly
+Corbenik CFW Updater: RE is a tool designed to install or update Corbenik CFW (https://github.com/chaoskagami/corbenik) and its nightly
 release Skeith CFW (https://github.com/chaoskagami/skeith).
 It is written in Lua and runs on Lua Player Plus 3DS by Rinnegatamante (https://github.com/Rinnegatamante/lpp-3ds and http://rinnegatamante.it).
 Its official website is GS2012 Homebrew (http://gs2012.xyz), more specifically its own page (http://gs2012.xyz/3ds/corbenikupdaterre)
@@ -62,6 +62,8 @@ This app requires you to have a Corbenik/Skeith installation compatible with the
 supported directly migrating data from an older installation. As that tool is now deprecated, and most Corbenik/Skeith users are on a recent-enough
 version, I didn't include the migration function in this updater. I will release an auto-migration tool separate of this, though, to save you the work
 while keeping this tool free from unnecessary code.
+
+This app can also do fresh installs, in which case you needn't have a Corbenik or Skeith installation already. Those options will show up if you don't have Corbenik, Skeith, or both, installed.
 
 This app supports BGMs. One of the releases includes a BGM (and you can set a custom BGM by placing it at /corbenik-updater-re/resources/bgm.wav on both releases), to listen to it you need a DSP dump (you can use the DSP dumper by Rinnegatamante found at http://rinnegataman.it).
 You also need to change the setting for the BGM to play. You can do this by either creating a new file at /corbenik-updater-re/settings/usebgm or by hitting SELECT on the main
