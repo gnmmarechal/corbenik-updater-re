@@ -25,10 +25,7 @@ Its official website is GS2012 Homebrew (http://gs2012.xyz), more specifically i
 
 ##Features:
 
-Corbenik CFW Updater: RE is capable of updating both Corbenik CFW and Skeith CFW.
-It detects for the existence of a proper installation of Corbenik CFW or Skeith. If neither is found, it'll error and
-prevent you from continuing. If only one of them is found, it'll hide the option to update the other CFW.
-You can set a custom payload path for both Corbenik and Skeith ARM9LoaderHax payloads by writing said path to the config files.
+Corbenik CFW Updater: RE is capable of updating both Corbenik CFW and Skeith CFW. It detects for the existence of a proper installation of Corbenik CFW or Skeith. If one or both aren't found, it'll show the option to install that (those) CFW(s). You can set a custom payload path for both Corbenik and Skeith ARM9LoaderHax payloads by writing said path to the config files.
 
 Ex. for the path 
 
