@@ -2,7 +2,7 @@
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 serverrel = 2
-version = "1.1.0"
+version = "1.1.1"
 if devmode == 1 then -- This will differentiate between stable and devscripts.
 	version = version.."-D"
 end
@@ -86,7 +86,7 @@ skeithver = Network.requestString(latestskeithverurl)
 
 -- Required FIRM files URLs
 
--- Old 3DS
+-- Old 3DS 11.0 2.51-0
 old =
 {
 	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000052",
@@ -97,7 +97,7 @@ old =
 	agbcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000202/cetk"
 }
 
--- New 3DS
+-- New 3DS 11.0 2.51-0
 new =
 {
 	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000021",
@@ -107,6 +107,23 @@ new =
 	agb = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000202/00000000",
 	agbcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000202/cetk"
 }
+
+-- Current NATIVE_FIRM Version check, corrects URLs to use if needed.
+kmaj, kmin, krev = System.getKernel()
+kver = kmaj.."."..kmin.."-"..krev
+
+if kver == "2.51-2" then -- 11.1
+	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000056"
+	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000026"
+else -- Uses 2.51-0 (11.0) FIRM instead (default values). This may change to always download the correct FIRM for the users' firmware.
+end
+
+-- Checks for the existence of config file /corbenik-updater-re/settings/usefirm11 and forces use of 11.0 URLs
+
+if System.doesFileExist("/corbenik-updater-re/settings/usefirm11") then
+	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000052"
+	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000021"	
+end
 
 -- More vars
 localzip = "/corbenik-updater-re/resources/cfw.zip"
