@@ -86,10 +86,10 @@ skeithver = Network.requestString(latestskeithverurl)
 
 -- Required FIRM files URLs
 
--- Old 3DS 11.0 2.51-0
+-- Old 3DS 11.1 2.51-2
 old =
 {
-	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000052",
+	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000056",
 	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/cetk",
 	twl = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/00000016",
 	twlcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/cetk",
@@ -97,10 +97,10 @@ old =
 	agbcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000202/cetk"
 }
 
--- New 3DS 11.0 2.51-0
+-- New 3DS 11.1 2.51-2
 new =
 {
-	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000021",
+	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000026",
 	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/cetk",
 	twl = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000102/00000000",
 	twlcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000102/cetk",
@@ -111,19 +111,6 @@ new =
 -- Current NATIVE_FIRM Version check, corrects URLs to use if needed.
 kmaj, kmin, krev = System.getKernel()
 kver = kmaj.."."..kmin.."-"..krev
-
-if kver == "2.51-2" then -- 11.1
-	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000056"
-	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000026"
-else -- Uses 2.51-0 (11.0) FIRM instead (default values). This may change to always download the correct FIRM for the users' firmware.
-end
-
--- Checks for the existence of config file /corbenik-updater-re/settings/usefirm11 and forces use of 11.0 URLs
-
-if System.doesFileExist("/corbenik-updater-re/settings/usefirm11") then
-	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000052"
-	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000021"	
-end
 
 -- More vars
 localzip = "/corbenik-updater-re/resources/cfw.zip"
