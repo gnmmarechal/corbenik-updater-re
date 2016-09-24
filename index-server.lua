@@ -2,7 +2,7 @@
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 serverrel = 2
-version = "1.1.1"
+version = "1.2.0"
 if devmode == 1 then -- This will differentiate between stable and devscripts.
 	version = version.."-D"
 end
@@ -326,8 +326,13 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 	debugWrite(0,80,"Extracting CFW files...", white, TOP_SCREEN)
 	if updated == 0 then
 		-- Renames arm9loaderhax payload to something else to prevent it from being overwritten by the ZIP extraction
-		System.renameFile("/arm9loaderhax.bin", "/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
-		System.renameFile("/arm9loaderhax_si.bin", "/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
+		-- Creates the backup directory
+		System.createDirectory("/corbenik-updater-re/backup")
+		System.createDirectory("/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year)
+		backupdir = "/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year
+		
+		System.renameFile("/arm9loaderhax.bin", backupdir.."/arm9loaderhax.bin")
+		System.renameFile("/arm9loaderhax_si.bin", backupdir.."/arm9loaderhax_si.bin")
 		-- Extracts the CFW's ZIP package
 		System.extractZIP(localzip, "/")
 		-- Deletes the arm9loaderhax payload that was extracted.
@@ -336,8 +341,8 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
 		-- If default path wasn't one of the standard A9LH paths, rename the previously backed up files to standard.
 		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") and not System.doesFileExist("/homebrew/3ds/boot.bin") then
-			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
-			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
+			System.renameFile(backupdir.."/arm9loaderhax_si.bin", "/arm9loaderhax_si.bin")
+			System.renameFile(backupdir.."/arm9loaderhax.bin", "/arm9loaderhax.bin")
 		end
 		-- Post-installation cleanup
 		System.deleteFile(localzip)
@@ -406,16 +411,19 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 	if updated == 0 then -- Back up, and set the back up filename (same filename scheme as the original updater, save for the arm9loaderhax payload)
 		h,m,s = System.getTime()
 		day_value,day,month,year = System.getDate()
-		oldcfwpath = cfwpath.."-BACKUP-"..h..m..s..day_value..day..month..year
-		oldarmpayloadpath = armpayloadpath.."-BACKUP-"..h..m..s..day_value..day..month..year..".bak"
+		System.createDirectory("/corbenik-updater-re/backup")
+		System.createDirectory("/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year)
+		backupdir = "/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year		
+		oldcfwpath = backupdir..cfwpath
+		oldarmpayloadpath = backupdir.."/armpayload.bin.bak"
 		System.renameDirectory(cfwpath, oldcfwpath)
 		System.renameFile(armpayloadpath, oldarmpayloadpath)
 	end
 	debugWrite(0,100,"Installing CFW update...", white, TOP_SCREEN)
 	if updated == 0 then
 		-- Renames arm9loaderhax payload to something else to prevent it from being overwritten by the ZIP extraction
-		System.renameFile("/arm9loaderhax.bin", "/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
-		System.renameFile("/arm9loaderhax_si.bin", "/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
+		System.renameFile("/arm9loaderhax.bin", backupdir.."/arm9loaderhax.bin")
+		System.renameFile("/arm9loaderhax_si.bin", backupdir.."/arm9loaderhax_si.bin")
 		-- Extracts the CFW's ZIP package
 		System.extractZIP(localzip, "/")
 		-- Deletes the arm9loaderhax payload that was extracted.
@@ -424,8 +432,8 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 		System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
 		-- If default path wasn't one of the standard A9LH paths, rename the previously backed up files to standard.
 		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") and not System.doesFileExist("/homebrew/3ds/boot.bin") then
-			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
-			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
+			System.renameFile(backupdir.."/arm9loaderhax_si.bin", "/arm9loaderhax_si.bin")
+			System.renameFile(backupdir.."/arm9loaderhax.bin", "/arm9loaderhax.bin")
 		end
 		-- Deletes empty directories that were in the package
 		System.deleteDirectory(cfwpath.."/lib/firmware")
