@@ -89,7 +89,7 @@ skeithver = Network.requestString(latestskeithverurl)
 -- Old 3DS 11.0 2.51-0
 old =
 {
-	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000052",
+	native = "http://gs2012.xyz/3ds/astro/firmware11.bin",
 	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/cetk",
 	twl = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/00000016",
 	twlcetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000102/cetk",
@@ -254,6 +254,22 @@ function readconfig(cfgpath, cfw)
 	end
 end
 
+function minormigrate(cfwpathw)
+	if migrationon == 1 then
+	--Moving CETK/keys to new directory
+	System.createDirectory(cfwpathw.."/share/keys")
+	if System.doesFileExist(cfwpathw.."/share/keys/native.cetk") then
+		System.renameFile(cfwpathw.."/share/keys/native.cetk", cfwpathw.."/lib/firmware/native.cetk")
+	end
+	if System.doesFileExist(cfwpathw.."/share/keys/twl.cetk") then
+		System.renameFile(cfwpathw.."/share/keys/twl.cetk", cfwpathw.."/lib/firmware/twl.cetk")
+	end
+	if System.doesFileExist(cfwpathw.."/share/keys/agb.cetk") then
+		System.renameFile(cfwpathw.."/share/keys/agb.cetk", cfwpathw.."/lib/firmware/agb.cetk")
+	end	
+	end
+end
+
 function precheck()
 	--Check model, if N3DS, set clock to 804MHz
 	if System.getModel() == 2 or System.getModel() == 4 then
@@ -362,6 +378,9 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		if System.doesFileExist("/o3ds_firm.sh") then
 			System.deleteFile("/o3ds_firm.sh")
 		end
+		if System.doesFileExist(cfwpath..".elf") then
+			System.deleteFile(cfwpath..".elf")
+		end		
 	end	
 	-- Download FIRM, CETKs, etc.
 	debugWrite(0,100,"Downloading required files...", white, TOP_SCREEN)	
@@ -378,6 +397,7 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 end
 function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for example, for a Corbenik  installation that keeps old config
 	headflip = 1
+	migrationon = 1
 	head()
 	-- Lazy fixes
 	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
@@ -406,6 +426,7 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 	debugWrite(0,60,"Downloading "..cfwname.." CFW ZIP...", white, TOP_SCREEN)
 	if updated == 0 then -- Download the file
 		Network.downloadFile(cfwurl, localzip)
+		minormigrate(cfwpath)
 	end
 	debugWrite(0,80,"Backing up old installation...", red, TOP_SCREEN)
 	if updated == 0 then -- Back up, and set the back up filename (same filename scheme as the original updater, save for the arm9loaderhax payload)
@@ -486,6 +507,9 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 		if System.doesFileExist("/o3ds_firm.sh") then
 			System.deleteFile("/o3ds_firm.sh")
 		end
+		if System.doesFileExist(cfwpath..".elf") then
+			System.deleteFile(cfwpath..".elf")
+		end		
 	end
 	debugWrite(0,120,"Updated. Press A to reboot or B to quit!", green, TOP_SCREEN)
 	updated = 1	
