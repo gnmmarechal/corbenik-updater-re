@@ -266,7 +266,10 @@ function minormigrate(cfwpathw)
 	end
 	if System.doesFileExist(cfwpathw.."/share/keys/agb.cetk") then
 		System.renameFile(cfwpathw.."/share/keys/agb.cetk", cfwpathw.."/lib/firmware/agb.cetk")
-	end	
+	end
+	if System.doesFileExist(cfwpathw.."/share/keys/native.key") then
+		System.renameFile(cfwpathw.."/share/keys/native.key", cfwpathw.."/lib/firmware/native.key")
+	end
 	end
 end
 
