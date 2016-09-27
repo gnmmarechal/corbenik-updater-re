@@ -4,7 +4,7 @@
 
 -- This script fetches the latest updater script and runs it. If the server-side script has a higher rel number, the CIA will also be updated.
 clientrel = 2
-bootstrapver = "1.0.2"
+bootstrapver = "1.0.3"
 
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
@@ -42,5 +42,9 @@ end
 Network.downloadFile(serverscripturl, "/corbenik-updater-re/cure.lua")
 
 -- Run server script
-dofile("/corbenik-updater-re/cure.lua")
+if System.doesFileExist("/corbenik-updatre-re/cure.lua") then
+	dofile("/corbenik-updater-re/cure.lua")
+else
+	error("Script is missing. Halting.")
+end
 System.exit()
