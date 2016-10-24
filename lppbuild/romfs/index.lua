@@ -42,7 +42,7 @@ end
 Network.downloadFile(serverscripturl, "/corbenik-updater-re/cure.lua")
 
 -- Run server script
-if System.doesFileExist("/corbenik-updatre-re/cure.lua") then
+if System.doesFileExist("/corbenik-updater-re/cure.lua") then
 	dofile("/corbenik-updater-re/cure.lua")
 else
 	error("Script is missing. Halting.")
