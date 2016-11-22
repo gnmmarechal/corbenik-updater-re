@@ -2,7 +2,7 @@
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 serverrel = 2
-version = "1.2.0R2"
+version = "1.2.1"
 if devmode == 1 then -- This will differentiate between stable and devscripts.
 	version = version.."-D"
 end
@@ -494,6 +494,17 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 			-- Moves cache and config to installation directory
 			System.renameDirectory(oldcfwpath.."/etc",cfwpath.."/etc")
 			System.renameDirectory(oldcfwpath.."/var/cache",cfwpath.."/var/cache")
+			-- Moves files from the old exefs directory to the new one
+			System.deleteDirectory(cfwpath.."/lib/exefs/data")
+			System.deleteDirectory(cfwpath.."/lib/exefs/ro")
+			System.deleteDirectory(cfwpath.."/lib/exefs/text")
+			System.deleteDirectory(cfwpath.."/lib/exefs")
+			System.createDirectory(oldcfwpath.."/lib")
+			System.createDirectory(oldcfwpath.."/lib/exefs")
+			System.createDirectory(oldcfwpath.."/lib/exefs/data")	
+			System.createDirectory(oldcfwpath.."/lib/exefs/ro")
+			System.createDirectory(oldcfwpath.."/lib/exefs/text")
+			System.renameDirectory(oldcfwpath.."/lib/exefs", cfwpath.."/lib/exefs")			
 		end
 		-- Post-installation cleanup
 		System.deleteFile(localzip)
@@ -513,8 +524,8 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 		if System.doesFileExist("/o3ds_firm.sh") then
 			System.deleteFile("/o3ds_firm.sh")
 		end
-		if System.doesFileExist("corbenik.elf") then
-			System.deleteFile("corbenik.elf")
+		if System.doesFileExist("/corbenik.elf") then
+			System.deleteFile("/corbenik.elf")
 		end		
 	end
 	debugWrite(0,120,"Updated. Press A to reboot or B to quit!", green, TOP_SCREEN)
