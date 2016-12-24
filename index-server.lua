@@ -384,8 +384,8 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		if System.doesFileExist("/o3ds_firm.sh") then
 			System.deleteFile("/o3ds_firm.sh")
 		end
-		if System.doesFileExist("corbenik.elf") then
-			System.deleteFile("corbenik.elf")
+		if System.doesFileExist("/corbenik.elf") then
+			System.deleteFile("/corbenik.elf")
 		end		
 	end	
 	-- Download FIRM, CETKs, etc.
