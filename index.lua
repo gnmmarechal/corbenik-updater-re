@@ -4,7 +4,7 @@
 
 -- This script fetches the latest updater script and runs it. If the server-side script has a higher rel number, the CIA will also be updated.
 clientrel = 2
-bootstrapver = "1.0.3"
+bootstrapver = "1.0.3R2"
 
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
