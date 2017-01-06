@@ -655,9 +655,6 @@ while true do
 	isdirtyupdate()
 	bgmtogglecheck()
 	-- Actual UI screens and installer phases
-	if devmode == 1 and Controls.read(pad, KEY_L) and (not Controls.read(oldpad, KEY_L)) then
-		System.takeScreenshot("/corbenik-updater-re/screenshot.bmp",false) 
-	end
 	if scr == 3 then
 		installer("/skeith")
 	elseif scr == 2 then
@@ -669,6 +666,8 @@ while true do
 	elseif scr == 1 then
 		firstscreen()
 	end
-	
-	flip()
+	if devmode == 1 and Controls.check(pad, KEY_L) and (not Controls.check(oldpad, KEY_L)) then
+		System.takeScreenshot("/corbenik-updater-re/screenshot.bmp",false) 
+	end	
+	flip()	
 end
