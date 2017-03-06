@@ -15,8 +15,13 @@ This program is free software: you can redistribute it and/or modify
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
-serverrel = 2
-version = "1.2.1R2"
+local serverrel = 2
+local version = "1.2.1R2"
+
+local configkeep = 0
+local showcorbenik = 1
+local showskeith = 1
+
 if devmode == 1 then -- This will differentiate between stable and devscripts.
 	version = version.."-D"
 end
@@ -31,20 +36,14 @@ end
 
 if System.doesFileExist("/corbenik-updater-re/settings/keepconfig") then
 	configkeep = 1
-else
-	configkeep = 0
 end
 
 -- Security checks
 if not System.doesFileExist("/corbenik/lib/firmware/native") then
 	showcorbenik = 0 -- Disables showing the Update Corbenik option.
-else
-	showcorbenik = 1
 end
 if not System.doesFileExist("/skeith/lib/firmware/native") then
 	showskeith = 0 -- Disables showing the Update Skeith option.
-else
-	showskeith = 1
 end
 if usebgm == 1 then
 	--Check for existence of DSP firm dump, if not, disable BGM.
@@ -74,34 +73,34 @@ if usebgm == 1 then
 end
 
 -- Variables
-updated = 0
-scr = 1
-oldpad = Controls.read()
-MAX_RAM_ALLOCATION = 10485760
+local updated = 0
+local scr = 1
+local oldpad = Controls.read()
+local MAX_RAM_ALLOCATION = 10485760
 
 --Colours
-white = Color.new(255,255,255)
-green = Color.new(0,240,32)
-red = Color.new(255,0,0)
-yellow = Color.new(255,255,0)
-black = Color.new(0,0,0)
+local white = Color.new(255,255,255)
+local green = Color.new(0,240,32)
+local red = Color.new(255,0,0)
+local yellow = Color.new(255,255,0)
+local black = Color.new(0,0,0)
 
 -- File URLs
-baseserver = "http://gs2012.xyz/3ds/corbenikupdaterre"
-filesserver = baseserver.."/cfw"
-latestcorbenikzip = filesserver.."/corbenikurl.txt"
-latestcorbenikverurl = filesserver.."/corbenik.txt"
-latestskeithzip = filesserver.."/skeithurl.txt"
-latestskeithverurl = filesserver.."/skeith.txt"
-corbenikurl = Network.requestString(latestcorbenikzip)
-skeithurl = Network.requestString(latestskeithzip)
-corbenikver = Network.requestString(latestcorbenikverurl)
-skeithver = Network.requestString(latestskeithverurl)
+local baseserver = "http://gs2012.xyz/3ds/corbenikupdaterre"
+local filesserver = baseserver.."/cfw"
+local latestcorbenikzip = filesserver.."/corbenikurl.txt"
+local latestcorbenikverurl = filesserver.."/corbenik.txt"
+local latestskeithzip = filesserver.."/skeithurl.txt"
+local latestskeithverurl = filesserver.."/skeith.txt"
+local corbenikurl = Network.requestString(latestcorbenikzip)
+local skeithurl = Network.requestString(latestskeithzip)
+local corbenikver = Network.requestString(latestcorbenikverurl)
+local skeithver = Network.requestString(latestskeithverurl)
 
 -- Required FIRM files URLs
 
 -- Old 3DS 11.0 2.51-0
-old =
+local old =
 {
 	native = "http://gs2012.xyz/3ds/astro/firmware11.bin",
 	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/cetk",
@@ -112,7 +111,7 @@ old =
 }
 
 -- New 3DS 11.0 2.51-0
-new =
+local new =
 {
 	native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000021",
 	nativecetk = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/cetk",
@@ -123,34 +122,32 @@ new =
 }
 
 -- Current NATIVE_FIRM Version check, corrects URLs to use if needed.
-kmaj, kmin, krev = System.getKernel()
-kver = kmaj.."."..kmin.."-"..krev
+local kmaj, kmin, krev = System.getKernel()
+local kver = kmaj.."."..kmin.."-"..krev
+local usefirm11 = false
 
-if kver == "2.51-2" then -- 11.1
+if System.doesFileExist("/corbenik-updater-re/settings/usefirm11") then
+	usefirm11 = true
+end
+
+if kver == "2.51-2" and (not usefirm11) then -- 11.1
 	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000056"
 	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000026"
-elseif kver == "2.52-0"	then -- 11.2
+elseif kver == "2.52-0"	and (not usefirm11) then -- 11.2
 	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000058"
 	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000028"
-elseif kver == "2.53-0" then -- 11.3
+elseif kver == "2.53-0" then (not usefirm11) -- 11.3
 	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/0000005c"
 	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/0000002d"
 else -- Uses 2.51-0 (11.0) FIRM instead (default values). This may change to always download the correct FIRM for the users' firmware.
 end
 
---- Checks for the existence of config file /corbenik-updater-re/settings/usefirm11 and forces use of 11.0 URLs
-
-if System.doesFileExist("/corbenik-updater-re/settings/usefirm11") then
-	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000052"
-	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000021"	
-end
-
 -- More vars
-localzip = "/corbenik-updater-re/resources/cfw.zip"
+local localzip = "/corbenik-updater-re/resources/cfw.zip"
 
 -- CFG Paths
-skeithcfgpath = "/corbenik-updater-re/settings/skeith.cfg"
-corbenikcfgpath = "/corbenik-updater-re/settings/corbenik.cfg"
+local skeithcfgpath = "/corbenik-updater-re/settings/skeith.cfg"
+local corbenikcfgpath = "/corbenik-updater-re/settings/corbenik.cfg"
 
 
 --System functions
@@ -174,7 +171,6 @@ function fileCopy(input, output)
 end
 
 function clear()
-
 	Screen.refresh()
 	Screen.clear(TOP_SCREEN)
 	Screen.clear(BOTTOM_SCREEN)
@@ -187,9 +183,7 @@ function flip()
 end
 
 function quit()
-	if usebgm == 0 then
-	
-	else
+	if usebgm == 1 then
 		Sound.close(bgm)
 		Sound.term()
 	end
