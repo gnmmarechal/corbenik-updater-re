@@ -18,7 +18,7 @@ This program is free software: you can redistribute it and/or modify
 local serverrel = 2
 local version = "1.2.1R2"
 
-local configkeep = 0
+local configkeep = false
 local showcorbenik = 1
 local showskeith = 1
 
@@ -35,7 +35,7 @@ if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
 end
 
 if System.doesFileExist("/corbenik-updater-re/settings/keepconfig") then
-	configkeep = 1
+	configkeep = false
 end
 
 -- Security checks
@@ -430,10 +430,10 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 		armpayloadpath = skeitharmpayloadpath
 	end
 	-- Check for configkeep variable
-	if configkeep == 1 then
-		keepconfig = 1
+	if configkeep then
+		keepconfig = true
 		else
-		keepconfig = 0
+		keepconfig = false
 	end
 	
 	debugWrite(0,60,"Downloading "..cfwname.." CFW ZIP...", white, TOP_SCREEN)
@@ -494,8 +494,8 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 		System.deleteDirectory(cfwpath.."/boot")
 		System.createDirectory(oldcfwpath.."/boot")
 		System.renameDirectory(oldcfwpath.."/boot",cfwpath.."/boot")
-		-- Keep config if keepconfig == 1
-		if keepconfig == 1 then
+		-- Keep config if keepconfig is true
+		if keepconfig then
 			-- Deletes the empty /etc directory
 			System.deleteDirectory(cfwpath.."/etc")
 			-- Moves cache and config to installation directory
@@ -540,20 +540,20 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
 end
 
 function isdirtyupdate() -- Checks whether to keep config or not and sets the var for it.
-	if configkeep == 1 then
+	if configkeep then
 		configkept = "Yes"
 	else
 		configkept = "No"
 	end
 	if Controls.check(pad, KEY_R) and not Controls.check(oldpad, KEY_R) then
-		if configkeep == 1 then
-			configkeep = 0
-			keepconfig = 0
+		if configkeep then
+			configkeep = false
+			keepconfig = false
 			-- Delete config setting for this option
 			System.deleteFile("/corbenik-updater-re/settings/keepconfig")
 		else
-			configkeep = 1
-			keepconfig = 1
+			configkeep = true
+			keepconfig = true
 			-- Create config option for this option to be saved upon exit and restart
 			confsettingstream = io.open("/corbenik-updater-re/settings/keepconfig",FCREATE)
 			io.write(confsettingstream,0,"Keep Config", 11)
