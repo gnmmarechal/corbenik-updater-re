@@ -35,7 +35,7 @@ if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
 end
 
 if System.doesFileExist("/corbenik-updater-re/settings/keepconfig") then
-	configkeep = false
+	configkeep = true
 end
 
 -- Security checks
