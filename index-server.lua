@@ -186,10 +186,6 @@ function flip()
 	oldpad = pad
 end
 
-function waitloop()
-	loop = 0
-end
-
 function quit()
 	if usebgm == 0 then
 	
