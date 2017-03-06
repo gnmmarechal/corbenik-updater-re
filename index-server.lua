@@ -136,7 +136,7 @@ if kver == "2.51-2" and (not usefirm11) then -- 11.1
 elseif kver == "2.52-0"	and (not usefirm11) then -- 11.2
 	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000058"
 	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000028"
-elseif kver == "2.53-0" then (not usefirm11) -- 11.3
+elseif kver == "2.53-0" and (not usefirm11) then -- 11.3
 	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/0000005c"
 	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/0000002d"
 else -- Uses 2.51-0 (11.0) FIRM instead (default values). This may change to always download the correct FIRM for the users' firmware.
