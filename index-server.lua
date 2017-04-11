@@ -16,7 +16,7 @@ This program is free software: you can redistribute it and/or modify
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 local serverrel = 2
-local version = "1.2.1R2"
+local version = "1.2.1R3"
 
 local configkeep = false
 local showcorbenik = 1
@@ -139,6 +139,9 @@ elseif kver == "2.52-0"	and (not usefirm11) then -- 11.2
 elseif kver == "2.53-0" and (not usefirm11) then -- 11.3
 	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/0000005c"
 	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/0000002d"
+elseif kver == "2.54-0" and (not usefirm11) then -- 11.4
+	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/0000005e"
+	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/0000002f"
 else -- Uses 2.51-0 (11.0) FIRM instead (default values). This may change to always download the correct FIRM for the users' firmware.
 end
 
