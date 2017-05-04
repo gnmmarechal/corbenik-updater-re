@@ -43,10 +43,10 @@ System.createDirectory("/corbenik-updater-re/resources")
 -- Check if user is in devmode or no (to either use index-server.lua or cure-nightly.lua)
 if System.doesFileExist("/corbenik-updater-re/settings/devmode") then
 	SCRIPT_URL = STABLE_SCRIPT_URL
-	DEV_MODE = 1
+	DEV_MODE = true
 else
 	SCRIPT_URL = NIGHTLY_SCRIPT_URL
-	DEV_MODE = 0
+	DEV_MODE = false
 end
 -- Download server script
 if System.doesFileExist("/corbenik-updater-re/cure.lua") then
