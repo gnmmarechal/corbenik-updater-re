@@ -16,22 +16,22 @@ This program is free software: you can redistribute it and/or modify
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 -- This script fetches the latest updater script and runs it. If the server-side script has a higher rel number, the CIA will also be updated.
-clientrel = 2
-bootstrapver = "1.0.3R2"
+CLIENT_REL = 3
+BOOTSTRAP_VER = "2.0.0"
 
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
 end
 
 -- Set server script URL
-stableserverscripturl = "http://gs2012.xyz/3ds/corbenikupdaterre/index-server.lua"
-nightlyserverscripturl = "http://gs2012.xyz/3ds/corbenikupdaterre/cure-nightly.lua"
+STABLE_SCRIPT_URL = "http://gs2012.xyz/3ds/corbenikupdaterre/index-server.lua"
+NIGHTLY_SCRIPT_URL = "http://gs2012.xyz/3ds/corbenikupdaterre/cure-nightly.lua"
 
 --Set server CIA type (BGM/NOBGM)
 if System.doesFileExist("romfs:/bgm.wav") then
-	CIAupdatetype = "BGM"
+	CORE_TYPE = "BGM"
 else
-	CIAupdatetype = "NOBGM"
+	CORE_TYPE = "NOBGM"
 end
 
 -- Create directories
@@ -42,17 +42,17 @@ System.createDirectory("/corbenik-updater-re/resources")
 
 -- Check if user is in devmode or no (to either use index-server.lua or cure-nightly.lua)
 if System.doesFileExist("/corbenik-updater-re/settings/devmode") then
-	serverscripturl = nightlyserverscripturl
-	devmode = 1
+	SCRIPT_URL = STABLE_SCRIPT_URL
+	DEV_MODE = 1
 else
-	serverscripturl = stableserverscripturl
-	devmode = 0
+	SCRIPT_URL = NIGHTLY_SCRIPT_URL
+	DEV_MODE = 0
 end
 -- Download server script
 if System.doesFileExist("/corbenik-updater-re/cure.lua") then
 	System.deleteFile("/corbenik-updater-re/cure.lua")
 end
-Network.downloadFile(serverscripturl, "/corbenik-updater-re/cure.lua")
+Network.downloadFile(SCRIPT_URL, "/corbenik-updater-re/cure.lua")
 
 -- Run server script
 if System.doesFileExist("/corbenik-updater-re/cure.lua") then
