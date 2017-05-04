@@ -15,87 +15,91 @@ This program is free software: you can redistribute it and/or modify
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
-local serverrel = 2
-local version = "1.2.1R3"
+local SERVER_REL = 3
+local VERSION = "2.0.0"
+local keepConfig = false
+local showCorbenik = true
+local showSkeith = true
 
-local configkeep = false
-local showcorbenik = 1
-local showskeith = 1
-
-if devmode == 1 then -- This will differentiate between stable and devscripts.
-	version = version.."-D"
+if DEV_MODE == 1 then -- This will differentiate between stable and devscripts.
+	VERSION = VERSION.."-D"
 end
+
 -- Handle Outdated CIA Notification
-if serverrel > clientrel then
+if SERVER_REL > CLIENT_REL then
 	error("New CORE CIA available. Please update.")
 end
+
 -- Settings checks
 if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
-	usebgm = 1
+	useBgm = true
 end
 
 if System.doesFileExist("/corbenik-updater-re/settings/keepconfig") then
-	configkeep = true
+	keepConfig = true
 end
 
 -- Security checks
 if not System.doesFileExist("/corbenik/lib/firmware/native") then
-	showcorbenik = 0 -- Disables showing the Update Corbenik option.
+	showCorbenik = false -- Disables showing the Update Corbenik option.
 end
+
 if not System.doesFileExist("/skeith/lib/firmware/native") then
-	showskeith = 0 -- Disables showing the Update Skeith option.
+	showSkeith = false -- Disables showing the Update Skeith option.
 end
-if usebgm == 1 then
+
+if useBgm == true then
 	--Check for existence of DSP firm dump, if not, disable BGM.
 	if not System.doesFileExist("/3ds/dspfirm.cdc") then
-		usebgm = 0
+		useBgm = false
 	end
 	--Check for existence of BGM, if none is found, disable BGM.
 	if System.doesFileExist("romfs:/bgm.wav") then
-		bgmpath = "romfs:/bgm.wav"
+		bgmPath = "romfs:/bgm.wav"
 	end
 	if System.doesFileExist("/corbenik-updater-re/resources/bgm.wav") then
-		bgmpath = "/corbenik-updater-re/resources/bgm.wav"
+		bgmPath = "/corbenik-updater-re/resources/bgm.wav"
 	end
 	--Disable BGM if bgmpath is null.
-	if bgmpath == nil then
-		usebgm = 0
+	if bgmPath == nil then
+		useBgm = false
 	end
 else
-	usebgm = 0
+	usebgm = false
 end
 
 -- Start BGM
-if usebgm == 1 then
+if useBgm == true then
 	Sound.init()
-	bgm = Sound.openWav(bgmpath, false)
+	bgm = Sound.openWav(bgmPath, false)
 	Sound.play(bgm, LOOP)
 end
 
 -- Variables
-local updated = 0
-local scr = 1
+local updated = false
+local screen = 1
 local oldpad = Controls.read()
 local MAX_RAM_ALLOCATION = 10485760
 
 --Colours
-local white = Color.new(255,255,255)
-local green = Color.new(0,240,32)
-local red = Color.new(255,0,0)
-local yellow = Color.new(255,255,0)
-local black = Color.new(0,0,0)
+local colors = {
+	white = Color.new(255, 255, 255),
+	green = Color.new(0, 240, 32),
+	red = Color.new(255, 0, 0),
+	yellow = Color.new(255, 255, 0),
+	black = Color.new(0, 0, 0)
+}
 
 -- File URLs
-local baseserver = "http://gs2012.xyz/3ds/corbenikupdaterre"
-local filesserver = baseserver.."/cfw"
-local latestcorbenikzip = filesserver.."/corbenikurl.txt"
-local latestcorbenikverurl = filesserver.."/corbenik.txt"
-local latestskeithzip = filesserver.."/skeithurl.txt"
-local latestskeithverurl = filesserver.."/skeith.txt"
-local corbenikurl = Network.requestString(latestcorbenikzip)
-local skeithurl = Network.requestString(latestskeithzip)
-local corbenikver = Network.requestString(latestcorbenikverurl)
-local skeithver = Network.requestString(latestskeithverurl)
+local urls = {
+	corbenikZip = Network.requestString("http://gs2012.xyz/3ds/corbenikupdaterre/cfw/corbenikurl.txt"),
+	skeithZip = Network.requestString("http://gs2012.xyz/3ds/corbenikupdaterre/cfw/skeithurl.txt")
+}
+
+local ver = {
+	corbenikVer = Network.requestString("http://gs2012.xyz/3ds/corbenikupdaterre/cfw/corbenik.txt"),
+	skeithVer = Network.requestString("http://gs2012.xyz/3ds/corbenikupdaterre/cfw/corbenikurl.txt")	
+}
 
 -- Required FIRM files URLs
 
@@ -130,6 +134,8 @@ if System.doesFileExist("/corbenik-updater-re/settings/usefirm11") then
 	usefirm11 = true
 end
 
+
+-- This must be tested. Ex. error(kver)
 if kver == "2.51-2" and (not usefirm11) then -- 11.1
 	old.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013800000002/00000056"
 	new.native = "http://nus.cdn.c.shop.nintendowifi.net/ccs/download/0004013820000002/00000026"
