@@ -286,6 +286,13 @@ function minormigrate(cfwpathw)
 	end
 end
 
+function isNew3DS() -- Function must be updated when the New 2DS XL comes out.
+	if System.getModel() == 2 or System.getModel() == 4 then
+		return true
+	end
+	return false
+end
+
 function precheck()
 	--Check model, if N3DS, set clock to 804MHz
 	if System.getModel() == 2 or System.getModel() == 4 then
@@ -309,23 +316,7 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)		
 	end	
 	-- Installer
-	if cfwpath == "/corbenik" then
-		cfwname = "Corbenik"
-		cfwurl = corbenikurl
-		armpayloadpath = corbenikarmpayloadpath
-		dl =
-		{
-			native = old.native,
-			nativecetk = old.nativecetk,
-			twl = old.twl,
-			twlcetk = old.twlcetk,
-			agb = old.agb,
-			agbcetk = old.agbcetk
-		}
-	elseif cfwpath == "/skeith" then
-		cfwname = "Skeith"
-		cfwurl = skeithurl
-		armpayloadpath = skeitharmpayloadpath
+	if isNew3DS() then
 		dl =
 		{
 			native = new.native,
@@ -335,6 +326,25 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 			agb = new.agb,
 			agbcetk = new.agbcetk
 		}
+	else
+		dl =
+		{
+			native = old.native,
+			nativecetk = old.nativecetk,
+			twl = old.twl,
+			twlcetk = old.twlcetk,
+			agb = old.agb,
+			agbcetk = old.agbcetk
+		}
+	end
+	if cfwpath == "/corbenik" then
+		cfwname = "Corbenik"
+		cfwurl = corbenikurl
+		armpayloadpath = corbenikarmpayloadpath
+	elseif cfwpath == "/skeith" then
+		cfwname = "Skeith"
+		cfwurl = skeithurl
+		armpayloadpath = skeitharmpayloadpath
 	end
 	paths =
 	{
