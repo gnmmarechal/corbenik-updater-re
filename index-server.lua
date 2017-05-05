@@ -186,7 +186,7 @@ function flip()
 end
 
 function quit()
-	if usebgm == 1 then
+	if useBgm then
 		Sound.close(bgm)
 		Sound.term()
 	end
@@ -194,7 +194,7 @@ function quit()
 end
 
 function debugWrite(x,y,text,color,display)
-	if updated == 1 then
+	if updated then
 		Screen.debugPrint(x,y,text,color,display)
 	else
 		i = 0
@@ -212,122 +212,109 @@ end
 
 -- Input, UI functions
 
-function inputscr(newscr, inputkey)
-	if Controls.check(pad,inputkey) and not Controls.check(oldpad,inputkey) then
-		if newscr == -1 then
+function scrSwitchOnInput(newScr, inputKey)
+	if Controls.check(pad,inputKey) and not Controls.check(oldpad,inputKey) then
+		if newScr == -1 then
 			quit()
 		end
-		if newscr == -2 then
-			if usebgm == 0 then
-			else
+		if newScr == -2 then
+			if useBgm then
 				Sound.close(bgm)
 				Sound.term()
 			end
 			System.reboot()
 		end
 		Screen.clear(TOP_SCREEN)
-		scr = newscr
+		scr = newScr
 	end	
 end
 
 -- Important cleanup function
-function precleanup()
-	if System.doesFileExist(localzip) then
-		System.deleteFile(localzip)
+function preCleanup(zipFile)
+	if System.doesFileExist(zipFile) then
+		System.deleteFile(zipFile)
 	end
 end
 
 -- Prechecks
-function readconfig(cfgpath, cfw)
+function readConfig(cfgPath)
 	-- Checks for a config file
-	if System.doesFileExist(cfgpath) then
-		configstream = io.open(cfgpath, FREAD)
-		temppayloadpath = io.read(configstream,0,io.size(configstream))
-		io.close(configstream)
-		if not System.doesFileExist(temppayloadpath) then
+	if System.doesFileExist(cfgPath) then
+		configStream = io.open(cfgPath, FREAD)
+		tempPayloadPath = io.read(configStream,0,io.size(configStream))
+		io.close(configStream)
+		if not System.doesFileExist(tempPayloadPath) then
 			-- File doesn't exist
-			System.deleteFile(cfgpath)
-			readconfig(cfgpath, cfw)
+			System.deleteFile(cfgPath)
+			return readConfig(cfgPath, cfw)
 		end
-		if cfw == "corbenik" then
-			corbenikarmpayloadpath = temppayloadpath
-		else
-			skeitharmpayloadpath = temppayloadpath
-		end
-	else
-		temppayloadpath = "/arm9loaderhax.bin"
+		tempPayloadPath = "/arm9loaderhax.bin"
 		if System.doesFileExist("/arm9loaderhax_si.bin") then
-			temppayloadpath = "/arm9loaderhax_si.bin"
+			tempPayloadPath = "/arm9loaderhax_si.bin"
 		end
-		if cfw == "corbenik" then
-			corbenikarmpayloadpath = temppayloadpath
-		else
-			skeitharmpayloadpath = temppayloadpath
+		return tempPayloadPath
+	end
+end
+
+function minorMigrate(cfwPath)
+	if migrationOn == true then
+		--Moving CETK/keys to new directory
+		System.createDirectory(cfwpathw.."/share/keys")
+		if System.doesFileExist(cfwpathw.."/share/keys/native.cetk") then
+			System.renameFile(cfwpathw.."/share/keys/native.cetk", cfwPath.."/lib/firmware/native.cetk")
+		end
+		if System.doesFileExist(cfwpathw.."/share/keys/twl.cetk") then
+			System.renameFile(cfwpathw.."/share/keys/twl.cetk", cfwPath.."/lib/firmware/twl.cetk")
+		end
+		if System.doesFileExist(cfwpathw.."/share/keys/agb.cetk") then
+			System.renameFile(cfwpathw.."/share/keys/agb.cetk", cfwPath.."/lib/firmware/agb.cetk")
+		end
+		if System.doesFileExist(cfwpathw.."/share/keys/native.key") then
+			System.renameFile(cfwpathw.."/share/keys/native.key", cfwPath.."/lib/firmware/native.key")
 		end
 	end
 end
 
-function minormigrate(cfwpathw)
-	if migrationon == 1 then
-	--Moving CETK/keys to new directory
-	System.createDirectory(cfwpathw.."/share/keys")
-	if System.doesFileExist(cfwpathw.."/share/keys/native.cetk") then
-		System.renameFile(cfwpathw.."/share/keys/native.cetk", cfwpathw.."/lib/firmware/native.cetk")
+function isNew3DS() -- Function must be updated when the New 2DS XL comes out.
+	if System.getModel() == 2 or System.getModel() == 4 then
+		return true
 	end
-	if System.doesFileExist(cfwpathw.."/share/keys/twl.cetk") then
-		System.renameFile(cfwpathw.."/share/keys/twl.cetk", cfwpathw.."/lib/firmware/twl.cetk")
-	end
-	if System.doesFileExist(cfwpathw.."/share/keys/agb.cetk") then
-		System.renameFile(cfwpathw.."/share/keys/agb.cetk", cfwpathw.."/lib/firmware/agb.cetk")
-	end
-	if System.doesFileExist(cfwpathw.."/share/keys/native.key") then
-		System.renameFile(cfwpathw.."/share/keys/native.key", cfwpathw.."/lib/firmware/native.key")
-	end
-	end
+	return false
 end
 
 function precheck()
 	--Check model, if N3DS, set clock to 804MHz
-	if System.getModel() == 2 or System.getModel() == 4 then
+	if isNew3DS() then
 		System.setCpuSpeed(NEW_3DS_CLOCK)
-		newconsole = 1
-	else
-		newconsole = 0
 	end
-	readconfig(corbenikcfgpath, "corbenik")
-	readconfig(skeithcfgpath, "skeith")
+	
+	corbenikArmPayloadPath = readConfig(corbenikCfgPath)
+	skeithArmPayloadPath = readConfig(skeithCfgPath)
 end
 
-function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
-	headflip = 1
+function freshInstall(cfwPath) -- Installs Corbenik/Skeith from scratch
+	headFlip = true
 	head()
 	-- Lazy fixes
 	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
-	if showskeith == 0 then
-		Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", black, TOP_SCREEN)
+	if not showSkeith then
+		Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", colors.black, TOP_SCREEN)
 	else
-		Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)		
+		Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", colors.black, TOP_SCREEN)		
 	end	
 	-- Installer
-	if cfwpath == "/corbenik" then
-		cfwname = "Corbenik"
-		cfwurl = corbenikurl
-		armpayloadpath = corbenikarmpayloadpath
-		dl =
-		{
-			native = old.native,
-			nativecetk = old.nativecetk,
-			twl = old.twl,
-			twlcetk = old.twlcetk,
-			agb = old.agb,
-			agbcetk = old.agbcetk
-		}
-	elseif cfwpath == "/skeith" then
-		cfwname = "Skeith"
-		cfwurl = skeithurl
-		armpayloadpath = skeitharmpayloadpath
-		dl =
-		{
+	if cfwPath == "/corbenik" then
+		cfwName = "Corbenik"
+		cfwUrl = urls.corbenikZip
+		armPayloadPath = corbenikArmPayloadPath
+	elseif cfwPath == "/skeith" then
+		cfwName = "Skeith"
+		cfwUrl = urls.skeithZip
+		armPayloadPath = skeithArmPayloadPath
+	end
+	
+	if isNew3DS() then
+		dl = {
 			native = new.native,
 			nativecetk = new.nativecetk,
 			twl = new.twl,
@@ -335,49 +322,59 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 			agb = new.agb,
 			agbcetk = new.agbcetk
 		}
+	else
+		dl = {
+			native = old.native,
+			nativecetk = old.nativecetk,
+			twl = old.twl,
+			twlcetk = old.twlcetk,
+			agb = old.agb,
+			agbcetk = old.agbcetk
+		}
 	end
+	
 	paths =
 	{
-		native = cfwpath.."/lib/firmware/native",
-		nativecetk = cfwpath.."/lib/firmware/native.cetk",
-		twl = cfwpath.."/lib/firmware/twl",
-		twlcetk = cfwpath.."/lib/firmware/twl.cetk",
-		agb = cfwpath.."/lib/firmware/agb",
-		agbcetk = cfwpath.."/lib/firmware/agb.cetk"
+		native = cfwPath.."/lib/firmware/native",
+		nativecetk = cfwPath.."/lib/firmware/native.cetk",
+		twl = cfwPath.."/lib/firmware/twl",
+		twlcetk = cfwPath.."/lib/firmware/twl.cetk",
+		agb = cfwPath.."/lib/firmware/agb",
+		agbcetk = cfwPath.."/lib/firmware/agb.cetk"
 	}	
 	
 	-- Download CFW ZIP
-	debugWrite(0,60,"Downloading "..cfwname.." CFW ZIP...", white, TOP_SCREEN)
-	if updated == 0 then
+	debugWrite(0,60,"Downloading "..cfwName.." CFW ZIP...", colors.white, TOP_SCREEN)
+	if not updated then
 		h,m,s = System.getTime()
 		day_value,day,month,year = System.getDate()	
-		Network.downloadFile(cfwurl, localzip)
+		Network.downloadFile(cfwUrl, localZipPath)
 	end
 	
 	-- Extract CFW to its directory
-	debugWrite(0,80,"Extracting CFW files...", white, TOP_SCREEN)
-	if updated == 0 then
+	debugWrite(0,80,"Extracting CFW files...", colors.white, TOP_SCREEN)
+	if not updated then
 		-- Renames arm9loaderhax payload to something else to prevent it from being overwritten by the ZIP extraction
 		-- Creates the backup directory
 		System.createDirectory("/corbenik-updater-re/backup")
 		System.createDirectory("/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year)
-		backupdir = "/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year
+		backupDir = "/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year
 		
-		System.renameFile("/arm9loaderhax.bin", backupdir.."/arm9loaderhax.bin")
-		System.renameFile("/arm9loaderhax_si.bin", backupdir.."/arm9loaderhax_si.bin")
+		System.renameFile("/arm9loaderhax.bin", backupDir.."/arm9loaderhax.bin")
+		System.renameFile("/arm9loaderhax_si.bin", backupDir.."/arm9loaderhax_si.bin")
 		-- Extracts the CFW's ZIP package
-		System.extractZIP(localzip, "/")
+		System.extractZIP(localZipPath, "/")
 		-- Deletes the arm9loaderhax payload that was extracted.
 		System.deleteFile("/arm9loaderhax.bin")
 		-- Extracts the payload to its path (according to config or default path)
-		System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
+		System.extractFromZIP(localZipPath,"arm9loaderhax.bin",armPayloadPath)
 		-- If default path wasn't one of the standard A9LH paths, rename the previously backed up files to standard.
 		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") and not System.doesFileExist("/homebrew/3ds/boot.bin") then
-			System.renameFile(backupdir.."/arm9loaderhax_si.bin", "/arm9loaderhax_si.bin")
-			System.renameFile(backupdir.."/arm9loaderhax.bin", "/arm9loaderhax.bin")
+			System.renameFile(backupDir.."/arm9loaderhax_si.bin", "/arm9loaderhax_si.bin")
+			System.renameFile(backupDir.."/arm9loaderhax.bin", "/arm9loaderhax.bin")
 		end
 		-- Post-installation cleanup
-		System.deleteFile(localzip)
+		System.deleteFile(localZipPath)
 		-- Clean files that were in the package and are not needed.
 		if System.doesFileExist("/README.md") then
 			System.deleteFile("/README.md")
@@ -399,7 +396,7 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		end		
 	end	
 	-- Download FIRM, CETKs, etc.
-	debugWrite(0,100,"Downloading required files...", white, TOP_SCREEN)	
+	debugWrite(0,100,"Downloading required files...", colors.white, TOP_SCREEN)	
 	if updated == 0 then
 		Network.downloadFile(dl.native, paths.native)
 		Network.downloadFile(dl.nativecetk, paths.nativecetk)
@@ -408,56 +405,50 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
 		Network.downloadFile(dl.agb, paths.agb)
 		Network.downloadFile(dl.agbcetk, paths.agbcetk)		
 	end	
-	debugWrite(0,120,"Installed. Press A to reboot or B to quit!", green, TOP_SCREEN)
-	updated = 1	
+	debugWrite(0,120,"Installed. Press A to reboot or B to quit!", colors.green, TOP_SCREEN)
+	updated = true	
 end
-function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for example, for a Corbenik  installation that keeps old config
-	headflip = 1
-	migrationon = 1
+function installcfw(cfwPath, configKeep) -- used as "installcfw("/corbenik", true)", for example, for a Corbenik  installation that keeps old config
+	headFlip = true
+	migrationOn = 1
 	head()
 	-- Lazy fixes
-	Screen.debugPrint(0,180,"B) Quit", black, TOP_SCREEN)
+	Screen.debugPrint(0,180,"B) Quit", colors.black, TOP_SCREEN)
 	if showskeith == 0 then
-		Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", black, TOP_SCREEN)
+		Screen.debugPrint(0,160,"X) Install nightly - Skeith CFW", colors.black, TOP_SCREEN)
 	else
-		Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", black, TOP_SCREEN)		
+		Screen.debugPrint(0,160,"X) Update nightly - Skeith CFW", colors.black, TOP_SCREEN)		
 	end
 	-- Installer
-	if cfwpath == "/corbenik" then
-		cfwname = "Corbenik"
-		cfwurl = corbenikurl
-		armpayloadpath = corbenikarmpayloadpath
-	elseif cfwpath == "/skeith" then
-		cfwname = "Skeith"
-		cfwurl = skeithurl
-		armpayloadpath = skeitharmpayloadpath
-	end
-	-- Check for configkeep variable
-	if configkeep then
-		keepconfig = true
-		else
-		keepconfig = false
+	if cfwPath == "/corbenik" then
+		cfwName = "Corbenik"
+		cfwurl = urls.corbenikZip
+		armPayloadPath = corbenikArmPayloadPath
+	elseif cfwPath == "/skeith" then
+		cfwName = "Skeith"
+		cfwUrl = urls.skeithZip
+		armPayloadPath = skeithArmPayloadPath
 	end
 	
-	debugWrite(0,60,"Downloading "..cfwname.." CFW ZIP...", white, TOP_SCREEN)
+	debugWrite(0,60,"Downloading "..cfwName.." CFW ZIP...", colors.white, TOP_SCREEN)
 	if updated == 0 then -- Download the file
-		Network.downloadFile(cfwurl, localzip)
-		minormigrate(cfwpath)
+		Network.downloadFile(cfwUrl, localZipPath)
+		minorMigrate(cfwPath)
 	end
-	debugWrite(0,80,"Backing up old installation...", red, TOP_SCREEN)
-	if updated == 0 then -- Back up, and set the back up filename (same filename scheme as the original updater, save for the arm9loaderhax payload)
+	debugWrite(0,80,"Backing up old installation...", colors.red, TOP_SCREEN)
+	if not updated then -- Back up, and set the back up filename (same filename scheme as the original updater, save for the arm9loaderhax payload)
 		h,m,s = System.getTime()
 		day_value,day,month,year = System.getDate()
 		System.createDirectory("/corbenik-updater-re/backup")
 		System.createDirectory("/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year)
-		backupdir = "/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year		
-		oldcfwpath = backupdir..cfwpath
-		oldarmpayloadpath = backupdir.."/armpayload.bin.bak"
-		System.renameDirectory(cfwpath, oldcfwpath)
-		System.renameFile(armpayloadpath, oldarmpayloadpath)
+		backupDir = "/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year		
+		oldCfwPath = backupDir..cfwPath
+		oldArmPayloadPath = backupDir.."/armpayload.bin.bak"
+		System.renameDirectory(cfwPath, oldCfwPath)
+		System.renameFile(armPayloadPath, oldArmPayloadPath)
 	end
-	debugWrite(0,100,"Installing CFW update...", white, TOP_SCREEN)
-	if updated == 0 then
+	debugWrite(0,100,"Installing CFW update...", colors.white, TOP_SCREEN)
+	if not updated then
 		-- Renames arm9loaderhax payload to something else to prevent it from being overwritten by the ZIP extraction
 		System.renameFile("/arm9loaderhax.bin", backupdir.."/arm9loaderhax.bin")
 		System.renameFile("/arm9loaderhax_si.bin", backupdir.."/arm9loaderhax_si.bin")
@@ -579,16 +570,16 @@ end
 -- Actual UI screens
 
 function head() -- Head of all screens
-	if headflip == 1 then
-		debugWrite(0,0,"Corbenik CFW Updater: RE v."..version, white, TOP_SCREEN)
-		debugWrite(0,20,"==============================", red, TOP_SCREEN)	
+	if headFlip then
+		debugWrite(0,0,"Corbenik CFW Updater: RE v."..VERSION, colors.white, TOP_SCREEN)
+		debugWrite(0,20,"==============================", colors.red, TOP_SCREEN)	
 	end
-	Screen.debugPrint(0,0,"Corbenik CFW Updater: RE v."..version, white, TOP_SCREEN)
-	Screen.debugPrint(0,20,"==============================", red, TOP_SCREEN)	
+	Screen.debugPrint(0,0,"Corbenik CFW Updater: RE v."..VERSION, colors.white, TOP_SCREEN)
+	Screen.debugPrint(0,20,"==============================", colors.red, TOP_SCREEN)	
 end
 
 function bottomscreen() -- Bottom Screen
-	if headflip == 1 then
+	if headFlip then
 		debugWrite(0,0, "Latest Corbenik CFW: v"..corbenikver, green, BOTTOM_SCREEN)
 		debugWrite(0,20, "Latest Skeith CFW: "..skeithver, green, BOTTOM_SCREEN)
 		debugWrite(0,40, "==============================", red, BOTTOM_SCREEN)
@@ -648,7 +639,7 @@ end
 function newinstaller(cfwpath) -- scr = 4/5 | Installation UI Screen (FRESH)
 	head()
 	debugWrite(0, 40, "Started fresh installation of CFW...", white, TOP_SCREEN)
-	freshinstall(cfwpath)
+	freshInstall(cfwpath)
 	inputscr(-1, KEY_B)
 	inputscr(-2, KEY_A)
 end	
