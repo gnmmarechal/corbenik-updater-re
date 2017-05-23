@@ -62,7 +62,7 @@ while keeping this tool free from unnecessary code.
 
 This app can also do fresh installs, in which case you needn't have a Corbenik or Skeith installation already. Those options will show up if you don't have Corbenik, Skeith, or both, installed.
 
-This app supports BGMs. One of the releases includes a BGM (and you can set a custom BGM by placing it at /corbenik-updater-re/resources/bgm.wav on both releases), to listen to it you need a DSP dump (you can use the DSP dumper by Rinnegatamante found at http://rinnegataman.it).
+This app supports BGMs. One of the releases includes a BGM (and you can set a custom BGM by placing it at /corbenik-updater-re/resources/bgm.wav on both releases), to listen to it you need a DSP dump (you can use the DSP dumper by Rinnegatamante found at http://rinnegatamante.it).
 You also need to change the setting for the BGM to play. You can do this by either creating a new file at /corbenik-updater-re/settings/usebgm or by hitting SELECT on the main
 menu and exiting/entering the app to apply the settings.
 
