@@ -660,6 +660,11 @@ function firstscreen() -- scr == 1 | First UI screen, main menu
     head()
     Screen.debugPrint(0,40,"Welcome to Corbenik CFW Updater: RE!", white, TOP_SCREEN)
     Screen.debugPrint(0,100,"Please select an option:", white, TOP_SCREEN)
+    if b9s_mode then
+    Screen.debugPrint(0,120,"Mode (Press L): Boot9Strap", white, TOP_SCREEN)
+    else
+    Screen.debugPrint(0,120,"Mode (Press L): ARM9LoaderHax", white, TOP_SCREEN)
+    end
     Screen.debugPrint(0,140,"Keep Config (Press R): "..configkept, white, TOP_SCREEN)
     if showcorbenik == 1 then
         Screen.debugPrint(0, 160,"A) Update stable - Corbenik CFW", white, TOP_SCREEN)
@@ -718,8 +723,8 @@ while true do
     elseif scr == 1 then
         firstscreen()
     end
-    if devmode == 1 and Controls.check(pad, KEY_L) and (not Controls.check(oldpad, KEY_L)) then
-        System.takeScreenshot("/corbenik-updater-re/screenshot.bmp",false)
+    if Controls.check(pad, KEY_L) and not Controls.check(oldpad, KEY_L) then
+        b9s_mode = not b9s_mode
     end
     flip()
 end
