@@ -22,6 +22,8 @@ local configkeep = false
 local showcorbenik = 1
 local showskeith = 1
 
+local b9s_mode = true
+
 if devmode == 1 then -- This will differentiate between stable and devscripts.
     version = version.."-D"
 end
@@ -38,6 +40,9 @@ if System.doesFileExist("/corbenik-updater-re/settings/keepconfig") then
     configkeep = true
 end
 
+if System.doesFileExist("/corbenik-updater-re/settings/usea9lh") then
+    b9s_mode = false
+end
 
 
 -- Security checks
@@ -297,11 +302,8 @@ end
 
 function precheck()
     --Check model, if N3DS, set clock to 804MHz
-    if System.getModel() == 2 or System.getModel() == 4 then
+    if isNew3DS() then
         System.setCpuSpeed(NEW_3DS_CLOCK)
-        newconsole = 1
-    else
-        newconsole = 0
     end
     readconfig(corbenikcfgpath, "corbenik")
     readconfig(skeithcfgpath, "skeith")
@@ -369,24 +371,36 @@ function freshinstall(cfwpath) -- Installs Corbenik/Skeith from scratch
     -- Extract CFW to its directory
     debugWrite(0,80,"Extracting CFW files...", white, TOP_SCREEN)
     if updated == 0 then
-        -- Renames arm9loaderhax payload to something else to prevent it from being overwritten by the ZIP extraction
+        -- Renames arm9loaderhax/firm payload to something else to prevent it from being overwritten by the ZIP extraction
         -- Creates the backup directory
         System.createDirectory("/corbenik-updater-re/backup")
         System.createDirectory("/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year)
         backupdir = "/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year
 
-        System.renameFile("/arm9loaderhax.bin", backupdir.."/arm9loaderhax.bin")
-        System.renameFile("/arm9loaderhax_si.bin", backupdir.."/arm9loaderhax_si.bin")
+        if not b9s_mode then
+            System.renameFile("/arm9loaderhax.bin", backupdir.."/arm9loaderhax.bin")
+            System.renameFile("/arm9loaderhax_si.bin", backupdir.."/arm9loaderhax_si.bin")
+        else
+            System.renameFile("/boot.firm", backupdir.."/boot.firm")
+        end
         -- Extracts the CFW's ZIP package
         System.extractZIP(localzip, "/")
-        -- Deletes the arm9loaderhax payload that was extracted.
+        -- Deletes the payloads that were extracted.
+        System.deleteFile("/boot.firm")
         System.deleteFile("/arm9loaderhax.bin")
         -- Extracts the payload to its path (according to config or default path)
-        System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
-        -- If default path wasn't one of the standard A9LH paths, rename the previously backed up files to standard.
-        if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") and not System.doesFileExist("/homebrew/3ds/boot.bin") then
+        if b9s_mode then
+            System.extractFromZIP(localzip,"boot.firm",armpayloadpath)
+        else
+            System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
+        end
+
+        -- If default path wasn't one of the standard A9LH/B9S paths, rename the previously backed up files to standard.
+        if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") and not System.doesFileExist("/homebrew/3ds/boot.bin") and not b9s_mode then
             System.renameFile(backupdir.."/arm9loaderhax_si.bin", "/arm9loaderhax_si.bin")
             System.renameFile(backupdir.."/arm9loaderhax.bin", "/arm9loaderhax.bin")
+        elseif b9s_mode and not System.doesFileExist("/boot.firm") then
+            System.renameFile(backupdir.."/boot.firm", "/boot.firm")
         end
         -- Post-installation cleanup
         System.deleteFile(localzip)
@@ -464,25 +478,41 @@ function installcfw(cfwpath) -- used as "installcfw("/corbenik", 1)", for exampl
         System.createDirectory("/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year)
         backupdir = "/corbenik-updater-re/backup/BACKUP-"..h..m..s..day_value..day..month..year
         oldcfwpath = backupdir..cfwpath
-        oldarmpayloadpath = backupdir.."/armpayload.bin.bak"
+        if not b9s_mode then
+            oldarmpayloadpath = backupdir.."/armpayload.bin.bak"
+        else
+            oldarmpayloadpath = backupdir.."/firmpayload.firm.bak"
+        end
+
         System.renameDirectory(cfwpath, oldcfwpath)
         System.renameFile(armpayloadpath, oldarmpayloadpath)
     end
     debugWrite(0,100,"Installing CFW update...", white, TOP_SCREEN)
     if updated == 0 then
-        -- Renames arm9loaderhax payload to something else to prevent it from being overwritten by the ZIP extraction
-        System.renameFile("/arm9loaderhax.bin", backupdir.."/arm9loaderhax.bin")
-        System.renameFile("/arm9loaderhax_si.bin", backupdir.."/arm9loaderhax_si.bin")
+        -- Renames payload to something else to prevent it from being overwritten by the ZIP extraction
+        if not b9s_mode then
+            System.renameFile("/arm9loaderhax.bin", backupdir.."/arm9loaderhax.bin")
+            System.renameFile("/arm9loaderhax_si.bin", backupdir.."/arm9loaderhax_si.bin")
+        else
+            System.renameFile("/boot.firm", backupdir.."/boot.firm")
+        end
         -- Extracts the CFW's ZIP package
         System.extractZIP(localzip, "/")
-        -- Deletes the arm9loaderhax payload that was extracted.
+        -- Deletes the payloads that were extracted.
         System.deleteFile("/arm9loaderhax.bin")
+        System.deleteFile("/boot.firm")
         -- Extracts the payload to its path (according to config or default path)
-        System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
-        -- If default path wasn't one of the standard A9LH paths, rename the previously backed up files to standard.
-        if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") and not System.doesFileExist("/homebrew/3ds/boot.bin") then
+        if b9s_mode then
+            System.extractFromZIP(localzip,"boot.firm",armpayloadpath)
+        else
+            System.extractFromZIP(localzip,"arm9loaderhax.bin",armpayloadpath)
+        end
+        -- If default path wasn't one of the standard A9LH/B9S paths, rename the previously backed up files to standard.
+        if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") and not System.doesFileExist("/homebrew/3ds/boot.bin") and not b9s_mode then
             System.renameFile(backupdir.."/arm9loaderhax_si.bin", "/arm9loaderhax_si.bin")
             System.renameFile(backupdir.."/arm9loaderhax.bin", "/arm9loaderhax.bin")
+        elseif b9s_mode and not System.doesFileExist("/boot.firm") then
+            System.renameFile(backupdir.."/boot.firm", "/boot.firm")
         end
         -- Deletes empty directories that were in the package
         System.deleteDirectory(cfwpath.."/lib/firmware")
