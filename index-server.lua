@@ -31,7 +31,7 @@ if serverrel > clientrel then
 end
 -- Settings checks
 if System.doesFileExist("/corbenik-updater-re/settings/usebgm") then
-	usebgm = 1
+	usebgm = true
 end
 
 if System.doesFileExist("/corbenik-updater-re/settings/keepconfig") then
@@ -45,10 +45,10 @@ end
 if not System.doesFileExist("/skeith/lib/firmware/native") then
 	showskeith = 0 -- Disables showing the Update Skeith option.
 end
-if usebgm == 1 then
+if usebgm then
 	--Check for existence of DSP firm dump, if not, disable BGM.
 	if not System.doesFileExist("/3ds/dspfirm.cdc") then
-		usebgm = 0
+		usebgm = false
 	end
 	--Check for existence of BGM, if none is found, disable BGM.
 	if System.doesFileExist("romfs:/bgm.wav") then
@@ -59,14 +59,14 @@ if usebgm == 1 then
 	end
 	--Disable BGM if bgmpath is null.
 	if bgmpath == nil then
-		usebgm = 0
+		usebgm = false
 	end
 else
-	usebgm = 0
+	usebgm = false
 end
 
 -- Start BGM
-if usebgm == 1 then
+if usebgm then
 	Sound.init()
 	bgm = Sound.openWav(bgmpath, false)
 	Sound.play(bgm, LOOP)
@@ -186,7 +186,7 @@ function flip()
 end
 
 function quit()
-	if usebgm == 1 then
+	if usebgm then
 		Sound.close(bgm)
 		Sound.term()
 	end
@@ -218,7 +218,7 @@ function inputscr(newscr, inputkey)
 			quit()
 		end
 		if newscr == -2 then
-			if usebgm == 0 then
+			if not usebgm then
 			else
 				Sound.close(bgm)
 				Sound.term()
