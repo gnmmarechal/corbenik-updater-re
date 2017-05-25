@@ -20,7 +20,7 @@ clientrel = 2
 bootstrapver = "1.0.3R2"
 
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
-	error("Failed to connect to the network.")
+    error("Failed to connect to the network.")
 end
 
 -- Set server script URL
@@ -29,9 +29,9 @@ nightlyserverscripturl = "http://gs2012.xyz/3ds/corbenikupdaterre/cure-nightly.l
 
 --Set server CIA type (BGM/NOBGM)
 if System.doesFileExist("romfs:/bgm.wav") then
-	CIAupdatetype = "BGM"
+    CIAupdatetype = "BGM"
 else
-	CIAupdatetype = "NOBGM"
+    CIAupdatetype = "NOBGM"
 end
 
 -- Create directories
@@ -42,22 +42,22 @@ System.createDirectory("/corbenik-updater-re/resources")
 
 -- Check if user is in devmode or no (to either use index-server.lua or cure-nightly.lua)
 if System.doesFileExist("/corbenik-updater-re/settings/devmode") then
-	serverscripturl = nightlyserverscripturl
-	devmode = 1
+    serverscripturl = nightlyserverscripturl
+    devmode = 1
 else
-	serverscripturl = stableserverscripturl
-	devmode = 0
+    serverscripturl = stableserverscripturl
+    devmode = 0
 end
 -- Download server script
 if System.doesFileExist("/corbenik-updater-re/cure.lua") then
-	System.deleteFile("/corbenik-updater-re/cure.lua")
+    System.deleteFile("/corbenik-updater-re/cure.lua")
 end
 Network.downloadFile(serverscripturl, "/corbenik-updater-re/cure.lua")
 
 -- Run server script
 if System.doesFileExist("/corbenik-updater-re/cure.lua") then
-	dofile("/corbenik-updater-re/cure.lua")
+    dofile("/corbenik-updater-re/cure.lua")
 else
-	error("Script is missing. Halting.")
+    error("Script is missing. Halting.")
 end
 System.exit()
